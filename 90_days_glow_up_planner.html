@@ -1,0 +1,2525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Reset & Rise — 90 Days Glow Up Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===========================
+   CSS VARIABLES
+=========================== */
+:root {
+  --cream: #f5f0e8;
+  --cream-light: #faf7f2;
+  --sand: #e8ddd0;
+  --gold: #c9a96e;
+  --gold-light: #e0c99a;
+  --gold-dark: #a07840;
+  --teal: #5a9fa8;
+  --teal-light: #8ec5cb;
+  --teal-muted: #b8d8dc;
+  --rose: #e8b4a0;
+  --rose-light: #f2d4ca;
+  --blush: #f0c8b8;
+  --sage: #8fa88a;
+  --text-dark: #3a2e24;
+  --text-mid: #6b5744;
+  --text-light: #9a8270;
+  --border: #d8cfc4;
+  --white: #ffffff;
+  --sidebar-w: 260px;
+  --sidebar-w-collapsed: 64px;
+  --topbar-h: 56px;
+  --mobile-nav-h: 60px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 20px rgba(58,46,36,0.08);
+  --shadow-lg: 0 8px 40px rgba(58,46,36,0.12);
+  --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* ===========================
+   RESET & BASE
+=========================== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{
+  font-family:'Jost',sans-serif;
+  background:var(--cream);
+  color:var(--text-dark);
+  overflow-x:hidden;
+  min-height:100vh;
+  min-height:100dvh;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--gold-light);border-radius:2px}
+
+/* ===========================
+   SPLASH SCREEN
+=========================== */
+#splash{
+  position:fixed;inset:0;
+  background:var(--cream);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:9999;
+  padding:24px;
+  transition:opacity 0.6s ease,visibility 0.6s ease;
+}
+#splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.splash-sun{width:64px;height:64px;margin-bottom:24px;animation:spinSlow 20s linear infinite}
+@keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.splash-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.2rem,8vw,4.5rem);
+  font-weight:300;letter-spacing:0.15em;
+  color:var(--text-dark);text-transform:uppercase;
+  line-height:1;margin-bottom:8px;text-align:center;
+}
+.splash-sub{
+  font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:32px;text-align:center;
+}
+.splash-desc{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;color:var(--text-mid);
+  margin-bottom:36px;text-align:center;
+  max-width:300px;line-height:1.6;
+}
+.btn-begin{
+  font-family:'Jost',sans-serif;font-size:0.8rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  background:var(--text-dark);color:var(--cream);
+  border:none;padding:16px 40px;cursor:pointer;
+  border-radius:2px;transition:all var(--transition);
+  min-height:52px;touch-action:manipulation;
+}
+.btn-begin:hover{background:var(--gold-dark)}
+.btn-begin:active{transform:scale(0.98)}
+
+/* ===========================
+   APP SHELL
+=========================== */
+#app{display:flex;min-height:100vh;min-height:100dvh}
+
+/* ===========================
+   SIDEBAR — DESKTOP
+=========================== */
+#sidebar{
+  width:var(--sidebar-w);
+  min-height:100vh;
+  background:var(--text-dark);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;
+  z-index:100;
+  transition:width var(--transition),transform var(--transition);
+  overflow:hidden;
+}
+#sidebar.collapsed{width:var(--sidebar-w-collapsed)}
+.sidebar-logo{
+  padding:24px 18px 18px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  display:flex;align-items:center;gap:12px;
+  min-height:72px;cursor:pointer;
+}
+.sidebar-logo-icon{width:32px;height:32px;flex-shrink:0}
+.sidebar-logo-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;font-weight:400;letter-spacing:0.08em;
+  color:var(--cream);white-space:nowrap;overflow:hidden;
+  transition:opacity var(--transition);
+}
+#sidebar.collapsed .sidebar-logo-text{opacity:0;width:0}
+.sidebar-toggle{
+  position:absolute;top:20px;right:-14px;
+  width:28px;height:28px;border-radius:50%;
+  background:var(--gold);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+  transition:all var(--transition);z-index:10;
+}
+.sidebar-toggle svg{transition:transform var(--transition);color:var(--text-dark)}
+#sidebar.collapsed .sidebar-toggle svg{transform:rotate(180deg)}
+.sidebar-nav{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 0}
+.sidebar-nav::-webkit-scrollbar{width:2px}
+.sidebar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1)}
+.nav-section-label{
+  font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(255,255,255,0.28);padding:14px 18px 5px;
+  white-space:nowrap;overflow:hidden;transition:opacity var(--transition);
+}
+#sidebar.collapsed .nav-section-label{opacity:0}
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 18px;cursor:pointer;
+  transition:all var(--transition);position:relative;
+  white-space:nowrap;color:rgba(255,255,255,0.6);
+}
+.nav-item:hover{color:var(--cream);background:rgba(255,255,255,0.06)}
+.nav-item.active{color:var(--gold-light);background:rgba(201,169,110,0.15)}
+.nav-item.active::before{
+  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:20px;background:var(--gold);border-radius:0 2px 2px 0;
+}
+.nav-item-icon{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.9rem}
+.nav-item-text{font-size:0.8rem;letter-spacing:0.03em;transition:opacity var(--transition);overflow:hidden}
+#sidebar.collapsed .nav-item-text{opacity:0;width:0}
+.nav-sub{overflow:hidden;max-height:0;transition:max-height 0.3s ease}
+.nav-sub.open{max-height:400px}
+.nav-sub-item{
+  display:flex;align-items:center;gap:10px;
+  padding:7px 18px 7px 44px;cursor:pointer;
+  font-size:0.74rem;color:rgba(255,255,255,0.42);
+  transition:all var(--transition);white-space:nowrap;
+}
+.nav-sub-item:hover{color:rgba(255,255,255,0.8)}
+.nav-sub-item.active{color:var(--gold-light)}
+#sidebar.collapsed .nav-sub{display:none}
+.nav-chevron{
+  margin-left:auto;flex-shrink:0;
+  transition:transform 0.25s ease;
+  width:13px;height:13px;color:rgba(255,255,255,0.28);
+}
+.nav-item.open .nav-chevron{transform:rotate(180deg)}
+
+/* ===========================
+   MAIN CONTENT
+=========================== */
+#main{
+  margin-left:var(--sidebar-w);
+  flex:1;transition:margin-left var(--transition);
+  min-height:100vh;min-height:100dvh;
+}
+#sidebar.collapsed ~ #main{margin-left:var(--sidebar-w-collapsed)}
+
+/* ===========================
+   TOP BAR
+=========================== */
+#topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(245,240,232,0.94);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  height:var(--topbar-h);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topbar-left{display:flex;align-items:center;gap:12px}
+#topbar-menu-btn{
+  display:none;width:40px;height:40px;border-radius:8px;
+  background:transparent;border:none;cursor:pointer;
+  color:var(--text-dark);align-items:center;justify-content:center;
+  flex-shrink:0;touch-action:manipulation;
+}
+.topbar-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.25rem;font-weight:400;
+  color:var(--text-dark);letter-spacing:0.05em;
+}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.day-badge{
+  font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--gold-dark);background:rgba(201,169,110,0.12);
+  padding:5px 10px;border-radius:20px;
+  border:1px solid rgba(201,169,110,0.3);white-space:nowrap;
+}
+#save-badge{
+  font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--sage);background:rgba(143,168,138,0.12);
+  padding:5px 10px;border-radius:20px;
+  border:1px solid rgba(143,168,138,0.3);
+  opacity:0;transition:opacity 0.4s ease;white-space:nowrap;
+}
+#save-badge.show{opacity:1}
+
+/* ===========================
+   SECTIONS
+=========================== */
+.section{
+  display:none;padding:28px 24px;
+  animation:fadeUp 0.35s ease both;
+}
+.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===========================
+   CARDS
+=========================== */
+.card{
+  background:var(--cream-light);border:1px solid var(--border);
+  border-radius:var(--radius);padding:22px;margin-bottom:20px;
+  box-shadow:var(--shadow);
+}
+.card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:400;
+  color:var(--text-dark);margin-bottom:6px;letter-spacing:0.03em;
+}
+.card-sub{
+  font-size:0.72rem;color:var(--text-light);
+  letter-spacing:0.08em;text-transform:uppercase;
+  margin-bottom:18px;font-style:italic;
+}
+.section-header{margin-bottom:28px}
+.section-header h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,5vw,2.8rem);
+  font-weight:300;color:var(--text-dark);
+  letter-spacing:0.08em;text-transform:uppercase;line-height:1.1;
+}
+.section-header p{
+  font-size:0.8rem;color:var(--text-light);
+  letter-spacing:0.06em;margin-top:5px;font-style:italic;
+}
+.gold-line{width:50px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:10px 0 0}
+
+/* ===========================
+   INPUTS — TOUCH OPTIMIZED
+=========================== */
+input[type=text],input[type=number],textarea,select{
+  width:100%;background:var(--white);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:10px 12px;
+  font-family:'Jost',sans-serif;font-size:16px;/* prevents iOS zoom */
+  color:var(--text-dark);
+  transition:border-color var(--transition),box-shadow var(--transition);
+  outline:none;resize:vertical;
+  -webkit-appearance:none;appearance:none;
+}
+input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus{
+  border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,169,110,0.15);
+}
+textarea{min-height:72px;line-height:1.5}
+label{
+  display:block;font-size:0.7rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-light);margin-bottom:6px;
+}
+.input-group{margin-bottom:14px}
+
+/* ===========================
+   SCORE DOTS
+=========================== */
+.score-dots{display:flex;gap:5px;flex-wrap:wrap}
+.score-dot{
+  width:34px;height:34px;border-radius:50%;
+  border:1.5px solid var(--border);background:var(--white);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;color:var(--text-light);
+  transition:all var(--transition);font-family:'Jost',sans-serif;
+  flex-shrink:0;touch-action:manipulation;
+  min-width:34px;/* prevent shrink on mobile */
+}
+.score-dot:hover,.score-dot:active{border-color:var(--gold);color:var(--gold)}
+.score-dot.selected{background:var(--teal);border-color:var(--teal);color:var(--white);font-weight:500}
+
+/* ===========================
+   LIFE AUDIT
+=========================== */
+.audit-row{
+  padding:14px 0;border-bottom:1px solid var(--border);
+}
+.audit-row:last-child{border-bottom:none}
+.audit-row-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--teal);font-weight:500}
+.audit-row-sub{font-size:0.7rem;color:var(--text-light);font-style:italic;margin-top:2px;margin-bottom:10px}
+
+/* ===========================
+   PRIORITY CARDS
+=========================== */
+.priority-card{
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:var(--radius);padding:18px;margin-bottom:14px;
+}
+.priority-card-label{
+  font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--gold-dark);font-weight:600;margin-bottom:10px;
+}
+
+/* ===========================
+   CHECKBOXES
+=========================== */
+.check-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.check-item:last-child{border-bottom:none}
+.custom-check{
+  width:24px;height:24px;border-radius:50%;
+  border:1.5px solid var(--border);flex-shrink:0;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all var(--transition);margin-top:1px;background:var(--white);
+  touch-action:manipulation;min-width:24px;
+}
+.custom-check.checked{background:var(--teal);border-color:var(--teal)}
+.custom-check.checked::after{content:'✓';color:white;font-size:12px}
+.check-input{
+  flex:1;background:transparent;border:none;
+  border-bottom:1px dashed var(--border);
+  padding:2px 4px;font-family:'Jost',sans-serif;
+  font-size:16px;color:var(--text-dark);outline:none;
+  min-width:0;
+}
+.check-input:focus{border-bottom-color:var(--gold)}
+.check-item.done .check-input{text-decoration:line-through;color:var(--text-light)}
+
+/* ===========================
+   AFFIRMATIONS
+=========================== */
+.affirmation-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.aff-circle{
+  width:22px;height:22px;border-radius:50%;
+  border:1.5px solid var(--rose);background:var(--rose-light);
+  flex-shrink:0;
+}
+.aff-text{
+  flex:1;background:transparent;border:none;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:1rem;
+  color:var(--teal);outline:none;
+  border-bottom:1px dashed var(--border);
+  min-width:0;
+}
+.aff-text:focus{border-bottom-color:var(--teal)}
+
+/* ===========================
+   BELIEFS GRID
+=========================== */
+.beliefs-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+.beliefs-col-header{
+  font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--text-light);padding:8px 0;border-bottom:1.5px solid var(--border);margin-bottom:8px;
+}
+
+/* ===========================
+   DATE NAV
+=========================== */
+.date-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding:10px 16px;
+  background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+}
+.date-nav-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.25rem;color:var(--text-dark);letter-spacing:0.05em;
+  text-align:center;
+}
+.nav-arrow{
+  width:40px;height:40px;border-radius:50%;
+  border:1.5px solid var(--border);background:var(--white);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all var(--transition);color:var(--text-mid);
+  flex-shrink:0;touch-action:manipulation;
+}
+.nav-arrow:hover,.nav-arrow:active{background:var(--gold);border-color:var(--gold);color:white}
+
+/* ===========================
+   MONTHLY CALENDAR
+=========================== */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-header-cell{
+  text-align:center;padding:8px 2px;
+  font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--text-light);font-weight:500;
+}
+.cal-cell{
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  border-radius:var(--radius-sm);font-size:0.82rem;color:var(--text-mid);
+  cursor:pointer;transition:all var(--transition);
+  background:var(--white);border:1px solid var(--border);position:relative;
+  touch-action:manipulation;
+}
+.cal-cell:hover,.cal-cell:active{background:var(--cream);border-color:var(--gold-light)}
+.cal-cell.empty{background:transparent;border-color:transparent;cursor:default}
+.cal-cell.today{border-color:var(--gold);background:rgba(201,169,110,0.1);font-weight:600;color:var(--gold-dark)}
+.cal-cell.selected{background:var(--teal);border-color:var(--teal);color:white;font-weight:600}
+.cal-cell.has-data::after{
+  content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
+  width:3px;height:3px;border-radius:50%;background:var(--gold);
+}
+
+/* ===========================
+   WEEKLY OVERVIEW
+=========================== */
+.week-day-row{
+  display:grid;grid-template-columns:48px 1fr;
+  border-bottom:1px solid var(--border);
+}
+.week-day-row:last-child{border-bottom:none}
+.week-day-label{
+  padding:12px;font-family:'Cormorant Garamond',serif;
+  font-size:1rem;color:var(--teal);
+  display:flex;align-items:flex-start;
+  border-right:1px solid var(--border);font-weight:500;
+  background:rgba(90,159,168,0.04);
+}
+.week-day-input{
+  padding:10px 14px;border:none;background:transparent;
+  font-family:'Jost',sans-serif;font-size:16px;
+  color:var(--text-dark);outline:none;resize:none;
+  min-height:56px;width:100%;line-height:1.5;
+}
+.week-day-input:focus{background:rgba(201,169,110,0.04)}
+
+/* ===========================
+   DAILY PLANNER
+=========================== */
+.daily-layout{display:grid;grid-template-columns:1fr 260px;gap:20px;align-items:start}
+.time-slot{display:grid;grid-template-columns:54px 1fr;border-bottom:1px solid var(--border)}
+.time-label{
+  padding:8px 10px;font-size:0.7rem;
+  color:var(--text-light);letter-spacing:0.05em;
+  border-right:1px solid var(--border);
+  display:flex;align-items:center;background:rgba(245,240,232,0.5);
+}
+.time-input{
+  border:none;background:transparent;padding:8px 10px;
+  font-family:'Jost',sans-serif;font-size:16px;
+  color:var(--text-dark);outline:none;width:100%;min-height:36px;
+}
+.time-input:focus{background:rgba(201,169,110,0.04)}
+.priority-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;border-bottom:1px dashed var(--border);
+}
+.p-circle{
+  width:22px;height:22px;border-radius:50%;
+  border:1.5px solid var(--gold);flex-shrink:0;
+  cursor:pointer;background:var(--white);
+  transition:all var(--transition);display:flex;align-items:center;justify-content:center;
+  touch-action:manipulation;min-width:22px;
+}
+.p-circle.done{background:var(--gold);border-color:var(--gold)}
+.p-circle.done::after{content:'✓';color:white;font-size:10px}
+.quote-bubble{
+  background:linear-gradient(135deg,var(--rose-light),var(--blush));
+  border-radius:var(--radius);padding:14px;margin:14px 0;text-align:center;
+}
+.quote-bubble p{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.9rem;color:var(--gold-dark);line-height:1.5;
+}
+
+/* ===========================
+   WORKOUT TABLE
+=========================== */
+.workout-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.workout-table{width:100%;border-collapse:collapse;min-width:420px}
+.workout-table th{
+  font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-light);padding:10px 10px;
+  border-bottom:1.5px solid var(--border);text-align:left;background:var(--cream);
+}
+.workout-table td{padding:4px 6px;border-bottom:1px solid var(--border);vertical-align:top}
+.workout-table td:first-child{
+  font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--teal);font-weight:500;background:rgba(90,159,168,0.04);
+  padding:10px 8px;white-space:nowrap;
+}
+.wk-cell-input{
+  border:none;background:transparent;width:100%;
+  font-family:'Jost',sans-serif;font-size:14px;
+  color:var(--text-dark);outline:none;
+  padding:6px 4px;min-height:44px;resize:none;
+}
+
+/* ===========================
+   MEAL PLAN TABLE
+=========================== */
+.meal-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.meal-table{width:100%;border-collapse:collapse;min-width:360px}
+.meal-table th{
+  font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--white);padding:10px 12px;text-align:left;background:var(--teal);
+}
+.meal-table th:first-child{background:transparent;color:var(--text-light)}
+.meal-table td{padding:4px 6px;border-bottom:1px solid var(--border);vertical-align:top}
+.meal-table td:first-child{
+  font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--teal);font-weight:500;background:rgba(90,159,168,0.04);
+  padding:10px 8px;white-space:nowrap;
+}
+.meal-input{
+  border:none;background:transparent;width:100%;
+  font-family:'Jost',sans-serif;font-size:14px;
+  color:var(--text-dark);outline:none;
+  padding:6px 4px;min-height:44px;resize:none;
+}
+
+/* ===========================
+   GROCERY
+=========================== */
+.grocery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+.grocery-col-title{
+  font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:8px;font-weight:500;
+}
+.grocery-item{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.g-check{
+  width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);
+  flex-shrink:0;cursor:pointer;background:var(--white);
+  transition:all var(--transition);display:flex;align-items:center;justify-content:center;
+  touch-action:manipulation;min-width:20px;
+}
+.g-check.checked{background:var(--teal);border-color:var(--teal)}
+.g-check.checked::after{content:'✓';color:white;font-size:9px}
+.g-input{
+  border:none;background:transparent;border-bottom:1px dashed var(--border);
+  width:100%;font-family:'Jost',sans-serif;font-size:16px;
+  color:var(--text-dark);outline:none;padding:2px 0;min-width:0;
+}
+.g-input:focus{border-bottom-color:var(--teal)}
+
+/* ===========================
+   CLEANING TRACKER
+=========================== */
+.cleaning-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.cleaning-table{border-collapse:collapse;min-width:520px;table-layout:fixed;width:100%}
+.cleaning-table col.col-room{width:72px}
+.cleaning-table col.col-task{width:150px}
+.cleaning-table col.col-day{width:34px}
+.cleaning-table th{
+  font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--text-light);padding:9px 5px;border-bottom:1.5px solid var(--border);text-align:center;
+}
+.cleaning-table th:first-child,.cleaning-table th:nth-child(2){text-align:left}
+.cleaning-table td{
+  padding:5px 5px;border-bottom:1px solid var(--border);vertical-align:middle;text-align:center;
+}
+.cleaning-table td.cell-room{
+  text-align:center;vertical-align:middle;background:rgba(255,255,255,0.5);width:72px;
+}
+.cleaning-table td.cell-task{text-align:left;vertical-align:middle;width:150px}
+.cleaning-table td.cell-day{text-align:center;vertical-align:middle;width:34px;padding:5px 3px}
+.clean-task-input{
+  border:none;border-bottom:1px dashed var(--border);background:transparent;
+  font-family:'Jost',sans-serif;font-size:13px;color:var(--text-dark);
+  outline:none;width:100%;padding:2px 3px;box-sizing:border-box;
+}
+.day-check{
+  width:22px;height:22px;border-radius:4px;
+  border:1.5px solid var(--border);cursor:pointer;
+  background:var(--white);display:inline-flex;align-items:center;justify-content:center;
+  transition:all var(--transition);flex-shrink:0;touch-action:manipulation;
+}
+.day-check.checked{background:var(--teal);border-color:var(--teal)}
+.day-check.checked::after{content:'✓';color:white;font-size:10px}
+
+/* ===========================
+   MOOD TRACKER
+=========================== */
+.mood-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px}
+.mood-cell{
+  aspect-ratio:1;border-radius:var(--radius-sm);
+  border:1.5px solid var(--border);background:var(--white);
+  cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;
+  transition:all var(--transition);position:relative;
+  touch-action:manipulation;
+}
+.mood-cell:active{transform:scale(0.96)}
+.mood-day-num{font-size:0.7rem;font-weight:500;color:var(--text-light)}
+.mood-color-dot{width:9px;height:9px;border-radius:50%;background:var(--border)}
+.mood-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.mood-legend-item{display:flex;align-items:center;gap:6px;font-size:0.7rem;color:var(--text-mid)}
+.mood-legend-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.mood-palette{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.mood-palette-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 11px;border-radius:20px;border:1.5px solid var(--border);
+  cursor:pointer;font-size:0.7rem;color:var(--text-mid);
+  background:var(--white);transition:all var(--transition);
+  touch-action:manipulation;
+}
+.mood-palette-btn:active{transform:scale(0.97)}
+.mood-palette-btn.selected{border-width:2px;font-weight:600}
+#selected-day-display{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  color:var(--text-dark);margin-bottom:10px;min-height:22px;
+}
+
+/* ===========================
+   HABIT TRACKER
+=========================== */
+.habit-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:20px}
+.habit-table{border-collapse:collapse;min-width:560px}
+.habit-table th{
+  font-size:0.62rem;letter-spacing:0.06em;
+  color:var(--text-light);padding:7px 4px;border-bottom:2px solid var(--border);
+  text-align:center;min-width:26px;
+}
+.habit-table th:first-child{text-align:left;min-width:160px;padding-left:0}
+.habit-table td{
+  padding:4px 4px;border-bottom:1px solid var(--border);
+  text-align:center;vertical-align:middle;
+}
+.habit-table td:first-child{text-align:left;padding-left:0;max-width:160px}
+.habit-name-input{
+  border:none;background:transparent;border-bottom:1px dashed var(--border);
+  font-family:'Jost',sans-serif;font-size:13px;color:var(--text-dark);
+  outline:none;width:100%;padding:2px 0;
+}
+.habit-check{
+  width:22px;height:22px;border-radius:4px;
+  border:1.5px solid var(--border);cursor:pointer;
+  background:var(--white);margin:auto;
+  display:flex;align-items:center;justify-content:center;
+  transition:all var(--transition);touch-action:manipulation;
+}
+.habit-check.checked{background:var(--teal);border-color:var(--teal)}
+.habit-check.checked::after{content:'✓';color:white;font-size:10px}
+.preset-habit{color:var(--teal);font-size:13px;font-style:italic}
+.progress-wrap{margin-bottom:20px}
+.progress-bar-bg{height:5px;background:var(--sand);border-radius:3px;overflow:hidden}
+.progress-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--teal-light));transition:width 0.5s ease}
+.progress-label{display:flex;justify-content:space-between;align-items:center;font-size:0.7rem;color:var(--text-light);margin-bottom:5px}
+
+/* ===========================
+   FINANCIAL
+=========================== */
+.lever-card{
+  border-left:3px solid var(--gold);background:var(--white);
+  border-radius:0 var(--radius) var(--radius) 0;
+  padding:18px 20px;margin-bottom:18px;
+}
+.lever-title{
+  font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--gold-dark);font-weight:600;margin-bottom:14px;
+}
+.money-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.small-currency-wrap{position:relative;display:flex;align-items:center}
+.small-currency{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--gold)}
+.money-leak-row{display:grid;grid-template-columns:26px 1fr 100px;gap:8px;align-items:center;margin-bottom:9px}
+.leak-num{
+  width:22px;height:22px;border-radius:50%;background:var(--gold);color:white;
+  display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:600;flex-shrink:0;
+}
+.eliminate-note{
+  font-size:0.73rem;color:var(--text-light);font-style:italic;
+  margin-top:8px;padding:8px 11px;background:rgba(201,169,110,0.06);border-radius:var(--radius-sm);
+}
+
+/* ===========================
+   BUDGET TRACKER
+=========================== */
+.budget-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.budget-col-title{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--teal);margin-bottom:10px;font-weight:500}
+.budget-row{display:grid;grid-template-columns:80px 1fr 80px;gap:6px;margin-bottom:7px;align-items:center}
+.budget-summary{margin-top:20px;padding:18px;background:var(--sand);border-radius:var(--radius)}
+.budget-summary-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--text-dark);margin-bottom:10px}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.5);font-size:0.82rem}
+.summary-val{font-weight:500;color:var(--gold-dark)}
+.savings-box{
+  margin-top:14px;padding:14px;
+  background:linear-gradient(135deg,var(--teal),var(--teal-light));
+  border-radius:var(--radius);color:white;text-align:center;
+}
+.savings-box-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;opacity:0.85}
+.savings-box-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300}
+
+/* ===========================
+   CONFIDENCE BANK
+=========================== */
+.conf-row{
+  display:grid;grid-template-columns:80px 1fr 1fr;
+  gap:10px;padding:8px 0;border-bottom:1px solid var(--border);align-items:center;
+}
+.conf-row:last-child{border-bottom:none}
+
+/* ===========================
+   RELAPSE
+=========================== */
+.relapse-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.relapse-dates{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.relapse-date-field{display:flex;align-items:center;gap:7px}
+.relapse-date-label{font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-light);white-space:nowrap}
+.protocol-steps{background:rgba(201,169,110,0.08);border-radius:var(--radius);padding:14px 18px;margin-bottom:18px}
+.protocol-step{display:flex;gap:9px;padding:6px 0;font-size:0.8rem;color:var(--text-mid);border-bottom:1px dashed rgba(201,169,110,0.2)}
+.protocol-step:last-child{border-bottom:none}
+.protocol-step strong{color:var(--gold-dark)}
+.step-num{
+  width:19px;height:19px;border-radius:50%;background:var(--gold);
+  color:white;font-size:0.62rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+}
+
+/* ===========================
+   SELF SABOTAGE
+=========================== */
+.sabotage-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.sabotage-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}
+.sabotage-col-title{font-size:0.66rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:7px}
+.belief-col{color:var(--text-light)}
+.action-col{color:var(--teal)}
+
+/* ===========================
+   ASSESSMENT
+=========================== */
+.assess-top{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.assess-box{background:var(--sand);border-radius:var(--radius);padding:16px;text-align:center}
+.assess-box-label{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:6px}
+.assess-box-sub{font-size:0.7rem;color:var(--text-light);margin-top:2px}
+.assess-2col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.assess-areas{display:grid;gap:8px}
+.area-row{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:7px 0;border-bottom:1px dashed var(--border)}
+.area-label{font-size:0.78rem;color:var(--text-mid);display:flex;align-items:center;gap:5px}
+.area-scores{display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--text-light)}
+.area-arrow{font-size:0.72rem;color:var(--gold)}
+.score-mini-input{
+  width:38px;border:none;border-bottom:1px solid var(--border);
+  background:transparent;text-align:center;font-size:16px;
+  color:var(--text-dark);outline:none;padding:2px;
+}
+
+/* ===========================
+   IDENTITY
+=========================== */
+.identity-statement{
+  background:linear-gradient(135deg,var(--sand),var(--cream));
+  border-radius:var(--radius);padding:20px;margin-bottom:18px;border:1px solid var(--border);
+}
+.identity-prefix{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:var(--text-light);margin-bottom:9px}
+
+/* ===========================
+   MISC UI
+=========================== */
+.quote-card{
+  background:linear-gradient(135deg,var(--rose-light),var(--blush));
+  border-radius:var(--radius);padding:18px 22px;text-align:center;margin:18px 0;
+}
+.quote-card p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--gold-dark);line-height:1.6}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}
+.mt-16{margin-top:16px}.mt-20{margin-top:20px}.mt-24{margin-top:24px}
+.mb-4{margin-bottom:4px}.mb-8{margin-bottom:8px}.mb-12{margin-bottom:12px}
+.mb-16{margin-bottom:16px}.mb-20{margin-bottom:20px}
+.italic{font-style:italic}.text-gold{color:var(--gold-dark)}.text-teal{color:var(--teal)}
+.text-light{color:var(--text-light)}.bold{font-weight:600}.full-width{width:100%}
+
+/* ===========================
+   HOME PAGE
+=========================== */
+.home-hero{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:40px 16px 32px;
+}
+.home-sun{width:64px;height:64px;margin-bottom:22px;animation:spinSlow 24s linear infinite;opacity:0.85}
+.home-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.2rem,6vw,3.8rem);
+  font-weight:300;letter-spacing:0.14em;
+  color:var(--text-dark);text-transform:uppercase;line-height:1;margin-bottom:8px;
+}
+.home-subtitle{font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.home-tagline{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;color:var(--text-mid);max-width:340px;line-height:1.6;margin-bottom:28px;
+}
+.home-gold-bar{width:70px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 28px}
+.home-stats{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.home-stat{display:flex;flex-direction:column;align-items:center;gap:3px}
+.home-stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--text-dark);line-height:1}
+.home-stat-label{font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-light)}
+.home-stat-sep{width:1px;background:var(--border);align-self:stretch;margin:4px 0}
+.home-quick-nav{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px;max-width:720px;width:100%;margin:0 auto;
+}
+.home-quick-card{
+  background:var(--cream-light);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px;
+  cursor:pointer;transition:all var(--transition);text-align:left;
+  touch-action:manipulation;
+}
+.home-quick-card:active{transform:scale(0.98);border-color:var(--gold)}
+.home-quick-icon{font-size:1.2rem;margin-bottom:7px;display:block}
+.home-quick-title{font-family:'Cormorant Garamond',serif;font-size:0.95rem;color:var(--text-dark);font-weight:500;margin-bottom:3px}
+.home-quick-sub{font-size:0.67rem;color:var(--text-light);letter-spacing:0.05em}
+.home-quote{
+  margin:28px auto 0;max-width:440px;padding:20px 24px;
+  background:linear-gradient(135deg,rgba(201,169,110,0.08),rgba(232,180,160,0.08));
+  border:1px solid rgba(201,169,110,0.2);border-radius:var(--radius);
+}
+.home-quote p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--text-mid);line-height:1.6;text-align:center}
+.home-progress-section{max-width:560px;width:100%;margin:24px auto 0}
+.home-progress-title{font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;text-align:left}
+.home-progress-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.home-progress-label{font-size:0.75rem;color:var(--text-mid);min-width:110px}
+.home-progress-bar-bg{flex:1;height:5px;background:var(--sand);border-radius:3px;overflow:hidden}
+.home-progress-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--teal-light));transition:width 0.6s ease}
+.home-progress-pct{font-size:0.7rem;color:var(--text-light);min-width:30px;text-align:right}
+
+/* ===========================
+   MOBILE OVERLAY MENU
+=========================== */
+#mobile-menu{
+  display:none;position:fixed;
+  inset:0;background:var(--text-dark);
+  z-index:500;overflow-y:auto;
+  padding:calc(var(--safe-top) + 16px) 20px calc(var(--safe-bottom) + 16px);
+  transform:translateX(-100%);
+  transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+#mobile-menu.open{transform:translateX(0)}
+.mobile-menu-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;padding-bottom:16px;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+.mobile-menu-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.3rem;color:var(--cream);letter-spacing:0.08em;
+}
+.mobile-menu-close{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,0.1);border:none;
+  cursor:pointer;color:white;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+  touch-action:manipulation;flex-shrink:0;
+}
+.mobile-menu-group{margin-bottom:8px}
+.mobile-menu-group-header{
+  font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(255,255,255,0.25);padding:14px 0 6px;
+}
+.mobile-menu-sub{
+  padding:12px 0 12px 16px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  cursor:pointer;font-size:0.85rem;color:rgba(255,255,255,0.6);
+  transition:all var(--transition);touch-action:manipulation;
+  -webkit-user-select:none;user-select:none;
+}
+.mobile-menu-sub:active{color:var(--gold-light);padding-left:20px}
+.mobile-menu-sub.active{color:var(--gold-light)}
+
+/* ===========================
+   TABLET HEADER NAV (768-1023px)
+=========================== */
+#tablet-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--text-dark);
+  z-index:200;
+  padding:6px 0 calc(max(6px, var(--safe-bottom)));
+  box-shadow:0 -3px 16px rgba(0,0,0,0.2);
+}
+.tablet-nav-inner{display:flex;align-items:stretch;justify-content:space-around}
+.tablet-nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;padding:5px 4px;cursor:pointer;
+  color:rgba(255,255,255,0.5);transition:all var(--transition);
+  font-size:0.6rem;letter-spacing:0.05em;text-transform:uppercase;
+  touch-action:manipulation;
+}
+.tablet-nav-item.active{color:var(--gold-light)}
+.tablet-nav-icon{font-size:1.1rem}
+
+/* ===========================
+   MOBILE BOTTOM NAV (<= 767px)
+=========================== */
+#mobile-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--text-dark);
+  z-index:200;
+  box-shadow:0 -3px 16px rgba(0,0,0,0.25);
+}
+.mobile-nav-inner{
+  display:flex;align-items:stretch;justify-content:space-around;
+  padding:8px 0 calc(max(8px, var(--safe-bottom)));
+}
+.mobile-nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;padding:4px 2px;cursor:pointer;
+  color:rgba(255,255,255,0.5);transition:all var(--transition);
+  font-size:0.55rem;letter-spacing:0.04em;text-transform:uppercase;
+  touch-action:manipulation;
+}
+.mobile-nav-item.active{color:var(--gold-light)}
+.mobile-nav-icon{font-size:1.1rem;line-height:1}
+
+/* ===========================
+   RESPONSIVE BREAKPOINTS
+=========================== */
+
+/* ---- TABLET: 768px – 1023px ---- */
+@media(min-width:768px) and (max-width:1023px){
+  #sidebar{display:none}
+  #tablet-nav{display:block}
+  #topbar-menu-btn{display:flex}
+  #main{margin-left:0;padding-bottom:calc(var(--mobile-nav-h) + var(--safe-bottom) + 8px)}
+  .section{padding:24px 20px}
+  .daily-layout{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr 1fr}
+  .grocery-grid{grid-template-columns:repeat(3,1fr)}
+  .assess-top{grid-template-columns:repeat(3,1fr)}
+  .assess-2col{grid-template-columns:1fr 1fr}
+  .budget-layout{grid-template-columns:1fr 1fr}
+  .money-grid{grid-template-columns:1fr 1fr}
+  .audit-row{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+  .home-quick-nav{grid-template-columns:repeat(3,1fr)}
+}
+
+/* ---- MOBILE: <= 767px ---- */
+@media(max-width:767px){
+  #sidebar{display:none}
+  #mobile-nav{display:block}
+  #topbar-menu-btn{display:flex}
+  #main{
+    margin-left:0;
+    padding-bottom:calc(var(--mobile-nav-h) + var(--safe-bottom) + 8px);
+  }
+  .section{padding:16px 14px}
+  .card{padding:16px}
+
+  /* Typography scales */
+  .section-header h1{font-size:1.8rem}
+  .card-title{font-size:1.3rem}
+  .topbar-title{font-size:1.1rem}
+  .date-nav-title{font-size:1.05rem}
+
+  /* Layouts collapse to single column */
+  .daily-layout{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+  .grid-3{grid-template-columns:1fr}
+  .grocery-grid{grid-template-columns:1fr 1fr}
+  .assess-top{grid-template-columns:1fr 1fr}
+  .assess-2col{grid-template-columns:1fr}
+  .budget-layout{grid-template-columns:1fr}
+  .beliefs-grid{grid-template-columns:1fr}
+  .money-grid{grid-template-columns:1fr}
+  .sabotage-2col{grid-template-columns:1fr}
+  .conf-row{grid-template-columns:70px 1fr}
+  .mood-grid{grid-template-columns:repeat(5,1fr)}
+  .money-leak-row{grid-template-columns:22px 1fr 88px}
+  .budget-row{grid-template-columns:70px 1fr 70px}
+  .relapse-dates{grid-template-columns:1fr}
+  .home-stats{gap:14px}
+  .home-quick-nav{grid-template-columns:1fr 1fr}
+
+  /* Audit rows stack vertically */
+  .audit-row{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+  .score-dots{gap:4px}
+  .score-dot{width:30px;height:30px;font-size:0.7rem;min-width:30px}
+
+  /* Topbar tighter */
+  #topbar{padding:0 12px;height:50px}
+  #topbar-menu-btn{width:36px;height:36px}
+  .day-badge{font-size:0.6rem;padding:4px 8px}
+  #save-badge{display:none}/* hide on very small screens */
+
+  /* Cal cells smaller */
+  .cal-header-cell{font-size:0.6rem;padding:6px 1px}
+  .cal-cell{font-size:0.75rem}
+
+  /* Home adjustments */
+  .home-hero{padding:24px 12px 20px}
+  .home-sun{width:52px;height:52px;margin-bottom:18px}
+  .home-title{font-size:2rem}
+  .home-stats{gap:12px}
+  .home-stat-val{font-size:1.7rem}
+  .home-progress-label{min-width:90px;font-size:0.7rem}
+  .home-quick-card{padding:14px 12px}
+}
+
+/* ---- Very small: <= 380px ---- */
+@media(max-width:380px){
+  .grocery-grid{grid-template-columns:1fr}
+  .score-dot{width:27px;height:27px;font-size:0.65rem;min-width:27px}
+  .assess-top{grid-template-columns:1fr}
+  .home-quick-nav{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <svg class="splash-sun" viewBox="0 0 80 80" fill="none">
+    <circle cx="40" cy="40" r="16" stroke="#c9a96e" stroke-width="1.5" fill="none"/>
+    <circle cx="40" cy="40" r="10" stroke="#c9a96e" stroke-width="1" fill="rgba(201,169,110,0.1)"/>
+    <line x1="40" y1="4" x2="40" y2="14" stroke="#c9a96e" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="40" y1="66" x2="40" y2="76" stroke="#c9a96e" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="4" y1="40" x2="14" y2="40" stroke="#c9a96e" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="66" y1="40" x2="76" y2="40" stroke="#c9a96e" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="12" y1="12" x2="19" y2="19" stroke="#c9a96e" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="61" y1="61" x2="68" y2="68" stroke="#c9a96e" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="12" y1="68" x2="19" y2="61" stroke="#c9a96e" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="61" y1="19" x2="68" y2="12" stroke="#c9a96e" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="25" y1="6" x2="27" y2="15" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+    <line x1="55" y1="65" x2="57" y2="74" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+    <line x1="6" y1="55" x2="15" y2="53" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+    <line x1="65" y1="27" x2="74" y2="25" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+  </svg>
+  <div class="splash-title">Reset &amp; Rise</div>
+  <div class="splash-sub">90 Days Glow Up Planner</div>
+  <div class="splash-desc">To become your most organized, disciplined, and radiant self.</div>
+  <button class="btn-begin" onclick="beginJourney()">✦ Begin Your Journey ✦</button>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- SIDEBAR (desktop only) -->
+  <nav id="sidebar">
+    <div class="sidebar-logo" onclick="navigateTo('home')" title="Home">
+      <svg class="sidebar-logo-icon" viewBox="0 0 36 36" fill="none">
+        <circle cx="18" cy="18" r="8" stroke="#c9a96e" stroke-width="1.2" fill="none"/>
+        <circle cx="18" cy="18" r="4" fill="rgba(201,169,110,0.3)"/>
+        <line x1="18" y1="2" x2="18" y2="8" stroke="#c9a96e" stroke-width="1" stroke-linecap="round"/>
+        <line x1="18" y1="28" x2="18" y2="34" stroke="#c9a96e" stroke-width="1" stroke-linecap="round"/>
+        <line x1="2" y1="18" x2="8" y2="18" stroke="#c9a96e" stroke-width="1" stroke-linecap="round"/>
+        <line x1="28" y1="18" x2="34" y2="18" stroke="#c9a96e" stroke-width="1" stroke-linecap="round"/>
+        <line x1="5" y1="5" x2="9" y2="9" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+        <line x1="27" y1="27" x2="31" y2="31" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+        <line x1="5" y1="31" x2="9" y2="27" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+        <line x1="27" y1="9" x2="31" y2="5" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+      </svg>
+      <span class="sidebar-logo-text">Reset &amp; Rise</span>
+    </div>
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="sidebar-nav" id="sidebarNav"></div>
+  </nav>
+
+  <!-- MAIN -->
+  <div id="main">
+    <header id="topbar">
+      <div class="topbar-left">
+        <button id="topbar-menu-btn" onclick="openMobileMenu()" aria-label="Menu">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <line x1="2" y1="5" x2="18" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="2" y1="15" x2="18" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div class="topbar-title" id="topbarTitle">Home</div>
+      </div>
+      <div class="topbar-right">
+        <span class="day-badge" id="dayBadge">Day 1</span>
+        <span id="save-badge">✓ Saved</span>
+      </div>
+    </header>
+    <div id="sections-container"></div>
+  </div>
+</div>
+
+<!-- TABLET NAV (768-1023px) -->
+<nav id="tablet-nav">
+  <div class="tablet-nav-inner" id="tabletNavInner"></div>
+</nav>
+
+<!-- MOBILE NAV (<=767px) -->
+<nav id="mobile-nav">
+  <div class="mobile-nav-inner" id="mobileNavInner"></div>
+</nav>
+
+<!-- FULL SCREEN MENU OVERLAY (mobile + tablet) -->
+<div id="mobile-menu">
+  <div class="mobile-menu-header">
+    <div class="mobile-menu-logo">Reset &amp; Rise</div>
+    <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+  </div>
+  <div id="mobileMenuContent"></div>
+</div>
+
+<script>
+/* ============================
+   DATA & STORAGE
+============================ */
+const APP_KEY = 'glow90_v1';
+
+function load(key, def=null) {
+  try {
+    const raw = localStorage.getItem(APP_KEY+'_'+key);
+    return raw !== null ? JSON.parse(raw) : def;
+  } catch(e) { return def; }
+}
+function save(key, val) {
+  try {
+    localStorage.setItem(APP_KEY+'_'+key, JSON.stringify(val));
+    showSaveBadge();
+  } catch(e) {}
+}
+
+let saveBadgeTimer;
+function showSaveBadge() {
+  const badge = document.getElementById('save-badge');
+  if (!badge) return;
+  badge.classList.add('show');
+  clearTimeout(saveBadgeTimer);
+  saveBadgeTimer = setTimeout(() => badge.classList.remove('show'), 1600);
+}
+
+/* ============================
+   NAV CONFIG
+============================ */
+const NAV = [
+  { id:'foundation', label:'Foundation', icon:'◈', sub:[
+    {id:'home', label:'Home'},
+    {id:'life-audit', label:'Life Audit'},
+    {id:'priorities', label:'My Priorities'},
+    {id:'letter', label:'Future Self Letter'},
+    {id:'identity', label:'Identity & Pillars'},
+    {id:'non-negotiables', label:'Non-Negotiables'},
+  ]},
+  { id:'daily-planning', label:'Daily Planning', icon:'◇', sub:[
+    {id:'monthly-overview', label:'Monthly Overview'},
+    {id:'weekly-overview', label:'Weekly Overview'},
+    {id:'daily-planner', label:'Daily Planner'},
+  ]},
+  { id:'health-home', label:'Health & Home', icon:'◎', sub:[
+    {id:'workout', label:'Monthly Workout'},
+    {id:'meal-plan', label:'Weekly Meal Plan'},
+    {id:'grocery', label:'Grocery List'},
+    {id:'cleaning', label:'Cleaning Tracker'},
+  ]},
+  { id:'mindset-money', label:'Mindset & Money', icon:'✦', sub:[
+    {id:'mood', label:'Mood Tracker'},
+    {id:'habits', label:'Habit Tracker'},
+    {id:'financial', label:'Financial Audit'},
+    {id:'budget', label:'Budget Tracker'},
+    {id:'confidence', label:'Confidence Bank'},
+    {id:'relapse', label:'Relapse Log'},
+    {id:'sabotage', label:'Self-Sabotage'},
+  ]},
+  { id:'assessments', label:'Assessments', icon:'◉', sub:[
+    {id:'day30', label:'Day 30 – Reset'},
+    {id:'day60', label:'Day 60 – Build'},
+    {id:'day90', label:'Day 90 – Transform'},
+  ]},
+];
+
+let currentSection = load('currentSection', 'home');
+let sidebarCollapsed = load('sidebarCollapsed', false);
+let openGroups = load('openGroups', ['foundation']);
+
+/* ============================
+   SPLASH
+============================ */
+function beginJourney() {
+  save('started', true);
+  document.getElementById('splash').classList.add('hidden');
+  renderApp();
+  navigateTo('home');
+}
+
+/* ============================
+   APP INIT
+============================ */
+function initApp() {
+  const started = load('started', false);
+  if (!started) {
+    document.getElementById('splash').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+  } else {
+    document.getElementById('splash').classList.add('hidden');
+    document.getElementById('app').style.display = 'flex';
+    renderApp();
+    navigateTo(currentSection);
+  }
+}
+
+function renderApp() {
+  document.getElementById('app').style.display = 'flex';
+  buildSidebar();
+  buildBottomNav();
+  buildAllSections();
+  if (sidebarCollapsed) document.getElementById('sidebar').classList.add('collapsed');
+  updateDayBadge();
+}
+
+/* ============================
+   SIDEBAR (desktop)
+============================ */
+function buildSidebar() {
+  const nav = document.getElementById('sidebarNav');
+  nav.innerHTML = '';
+  NAV.forEach(group => {
+    const label = document.createElement('div');
+    label.className = 'nav-section-label';
+    label.textContent = group.label;
+    nav.appendChild(label);
+
+    const isOpen = openGroups.includes(group.id);
+    const parentItem = document.createElement('div');
+    parentItem.className = 'nav-item' + (isOpen ? ' open' : '');
+    parentItem.dataset.group = group.id;
+    parentItem.innerHTML = `
+      <span class="nav-item-icon">${group.icon}</span>
+      <span class="nav-item-text">${group.label}</span>
+      <svg class="nav-chevron" viewBox="0 0 14 14" fill="none"><path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    `;
+    parentItem.addEventListener('click', () => toggleGroup(group.id));
+    nav.appendChild(parentItem);
+
+    const subList = document.createElement('div');
+    subList.className = 'nav-sub' + (isOpen ? ' open' : '');
+    subList.id = 'sub-' + group.id;
+    group.sub.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'nav-sub-item' + (currentSection === item.id ? ' active' : '');
+      el.dataset.section = item.id;
+      el.textContent = item.label;
+      el.addEventListener('click', () => navigateTo(item.id));
+      subList.appendChild(el);
+    });
+    nav.appendChild(subList);
+  });
+}
+
+function toggleGroup(id) {
+  if (openGroups.includes(id)) {
+    openGroups = openGroups.filter(g => g !== id);
+  } else {
+    openGroups.push(id);
+  }
+  save('openGroups', openGroups);
+  buildSidebar();
+}
+
+function toggleSidebar() {
+  const s = document.getElementById('sidebar');
+  s.classList.toggle('collapsed');
+  sidebarCollapsed = s.classList.contains('collapsed');
+  save('sidebarCollapsed', sidebarCollapsed);
+}
+
+/* ============================
+   BOTTOM NAVS (tablet + mobile)
+============================ */
+function buildBottomNav() {
+  buildTabletNav();
+  buildMobileNav();
+}
+
+function buildTabletNav() {
+  const inner = document.getElementById('tabletNavInner');
+  inner.innerHTML = '';
+  NAV.forEach(group => {
+    const item = document.createElement('div');
+    const isActive = group.sub.some(s => s.id === currentSection);
+    item.className = 'tablet-nav-item' + (isActive ? ' active' : '');
+    item.innerHTML = `<span class="tablet-nav-icon">${group.icon}</span><span>${group.label}</span>`;
+    item.addEventListener('click', () => openMobileMenu(group.id));
+    inner.appendChild(item);
+  });
+}
+
+function buildMobileNav() {
+  const inner = document.getElementById('mobileNavInner');
+  inner.innerHTML = '';
+  const shortLabels = ['Found.','Daily','Health','Mindset','Check'];
+  NAV.forEach((group, i) => {
+    const item = document.createElement('div');
+    const isActive = group.sub.some(s => s.id === currentSection);
+    item.className = 'mobile-nav-item' + (isActive ? ' active' : '');
+    item.innerHTML = `<span class="mobile-nav-icon">${group.icon}</span><span>${shortLabels[i]}</span>`;
+    item.addEventListener('click', () => openMobileMenu(group.id));
+    inner.appendChild(item);
+  });
+}
+
+function openMobileMenu(focusGroupId) {
+  const menu = document.getElementById('mobile-menu');
+  const content = document.getElementById('mobileMenuContent');
+  content.innerHTML = '';
+  NAV.forEach(group => {
+    const groupDiv = document.createElement('div');
+    groupDiv.className = 'mobile-menu-group';
+    const header = document.createElement('div');
+    header.className = 'mobile-menu-group-header';
+    header.textContent = group.label;
+    groupDiv.appendChild(header);
+    group.sub.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'mobile-menu-sub' + (currentSection === item.id ? ' active' : '');
+      el.textContent = item.label;
+      el.addEventListener('click', () => {
+        navigateTo(item.id);
+        closeMobileMenu();
+      });
+      groupDiv.appendChild(el);
+    });
+    content.appendChild(groupDiv);
+  });
+  menu.style.display = 'block';
+  requestAnimationFrame(() => menu.classList.add('open'));
+
+  // Scroll to focused group
+  if (focusGroupId) {
+    setTimeout(() => {
+      const groups = content.querySelectorAll('.mobile-menu-group');
+      const idx = NAV.findIndex(g => g.id === focusGroupId);
+      if (idx >= 0 && groups[idx]) groups[idx].scrollIntoView({behavior:'smooth', block:'start'});
+    }, 120);
+  }
+}
+
+function closeMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  menu.classList.remove('open');
+  setTimeout(() => { menu.style.display = 'none'; }, 300);
+}
+
+/* ============================
+   NAVIGATION
+============================ */
+function navigateTo(sectionId) {
+  currentSection = sectionId;
+  save('currentSection', sectionId);
+
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('sec-' + sectionId);
+  if (target) {
+    target.classList.add('active');
+    // scroll main to top
+    const main = document.getElementById('main');
+    if (main) main.scrollTop = 0;
+    window.scrollTo(0, 0);
+  }
+
+  // Update sidebar active state
+  document.querySelectorAll('.nav-sub-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.section === sectionId);
+  });
+
+  // Update topbar title
+  let title = '';
+  NAV.forEach(g => g.sub.forEach(s => { if (s.id === sectionId) title = s.label; }));
+  document.getElementById('topbarTitle').textContent = title;
+
+  // Ensure parent group open in sidebar
+  NAV.forEach(g => {
+    if (g.sub.some(s => s.id === sectionId)) {
+      if (!openGroups.includes(g.id)) {
+        openGroups.push(g.id);
+        save('openGroups', openGroups);
+        buildSidebar();
+      }
+    }
+  });
+
+  // Refresh home stats
+  if (sectionId === 'home') {
+    const homeSec = document.getElementById('sec-home');
+    if (homeSec) buildHome(homeSec);
+  }
+
+  // Refresh bottom nav active states
+  buildTabletNav();
+  buildMobileNav();
+  updateDayBadge();
+}
+
+function updateDayBadge() {
+  const start = load('startDate', null);
+  if (!start) { save('startDate', Date.now()); document.getElementById('dayBadge').textContent = 'Day 1'; return; }
+  const day = Math.min(Math.floor((Date.now()-start)/86400000)+1, 90);
+  document.getElementById('dayBadge').textContent = `Day ${day}`;
+}
+
+/* ============================
+   BUILD ALL SECTIONS
+============================ */
+function buildAllSections() {
+  const container = document.getElementById('sections-container');
+  container.innerHTML = '';
+  const sections = [
+    {id:'home', builder:buildHome},
+    {id:'life-audit', builder:buildLifeAudit},
+    {id:'priorities', builder:buildPriorities},
+    {id:'letter', builder:buildLetter},
+    {id:'identity', builder:buildIdentity},
+    {id:'non-negotiables', builder:buildNonNegotiables},
+    {id:'monthly-overview', builder:buildMonthlyOverview},
+    {id:'weekly-overview', builder:buildWeeklyOverview},
+    {id:'daily-planner', builder:buildDailyPlanner},
+    {id:'workout', builder:buildWorkout},
+    {id:'meal-plan', builder:buildMealPlan},
+    {id:'grocery', builder:buildGrocery},
+    {id:'cleaning', builder:buildCleaning},
+    {id:'mood', builder:buildMood},
+    {id:'habits', builder:buildHabits},
+    {id:'financial', builder:buildFinancial},
+    {id:'budget', builder:buildBudget},
+    {id:'confidence', builder:buildConfidence},
+    {id:'relapse', builder:buildRelapse},
+    {id:'sabotage', builder:buildSabotage},
+    {id:'day30', builder:buildDay30},
+    {id:'day60', builder:buildDay60},
+    {id:'day90', builder:buildDay90},
+  ];
+  sections.forEach(({id, builder}) => {
+    const sec = document.createElement('div');
+    sec.className = 'section';
+    sec.id = 'sec-' + id;
+    container.appendChild(sec);
+    builder(sec);
+  });
+}
+
+/* ============================
+   AUTO-SAVE
+============================ */
+function autoSave(el) {
+  const key = el.dataset.key;
+  if (!key) return;
+  save(key, el.value);
+}
+function attachAutoSave(container) {
+  container.querySelectorAll('[data-key]').forEach(el => {
+    el.addEventListener('input', () => autoSave(el));
+    const val = load(el.dataset.key, '');
+    if (val !== null && val !== '') el.value = val;
+  });
+}
+
+/* ============================
+   SECTION: HOME
+============================ */
+function buildHome(sec) {
+  const startDate = load('startDate', null);
+  const dayNum = startDate ? Math.min(Math.floor((Date.now()-startDate)/86400000)+1, 90) : 1;
+  const dayPct = Math.round((dayNum/90)*100);
+  const hm = load('habitMonth', {m:new Date().getMonth(),y:new Date().getFullYear()});
+  const daysInMonth = new Date(hm.y, hm.m+1, 0).getDate();
+  const hPrefix = `habit_${hm.y}_${hm.m}`;
+  let hTotal=0, hDone=0;
+  for(let h=0;h<10;h++) for(let d=1;d<=daysInMonth;d++){hTotal++;if(load(`${hPrefix}_h${h}_d${d}`,false))hDone++;}
+  const habitPct = hTotal>0 ? Math.round(hDone/hTotal*100) : 0;
+  let nnDone=0;
+  for(let i=0;i<5;i++) if(load('nonneg_done_'+i,false)) nnDone++;
+  const nnPct = Math.round((nnDone/5)*100);
+
+  const quickLinks = [
+    {icon:'◇', title:'Daily Planner', sub:"Plan today's schedule", id:'daily-planner'},
+    {icon:'◈', title:'Life Audit', sub:'Score your life areas', id:'life-audit'},
+    {icon:'✦', title:'Habit Tracker', sub:'Track your daily habits', id:'habits'},
+    {icon:'◎', title:'Meal Plan', sub:'Plan your weekly meals', id:'meal-plan'},
+    {icon:'💰', title:'Budget', sub:'Monitor your finances', id:'budget'},
+    {icon:'◉', title:'Day 30 Check-in', sub:'Assess your progress', id:'day30'},
+  ];
+
+  sec.innerHTML = `
+    <div class="home-hero">
+      <svg class="home-sun" viewBox="0 0 80 80" fill="none">
+        <circle cx="40" cy="40" r="16" stroke="#c9a96e" stroke-width="1.5" fill="none"/>
+        <circle cx="40" cy="40" r="10" stroke="#c9a96e" stroke-width="1" fill="rgba(201,169,110,0.1)"/>
+        <line x1="40" y1="4" x2="40" y2="14" stroke="#c9a96e" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="40" y1="66" x2="40" y2="76" stroke="#c9a96e" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="4" y1="40" x2="14" y2="40" stroke="#c9a96e" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="66" y1="40" x2="76" y2="40" stroke="#c9a96e" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="12" y1="12" x2="19" y2="19" stroke="#c9a96e" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="61" y1="61" x2="68" y2="68" stroke="#c9a96e" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="12" y1="68" x2="19" y2="61" stroke="#c9a96e" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="61" y1="19" x2="68" y2="12" stroke="#c9a96e" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="25" y1="6" x2="27" y2="15" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+        <line x1="55" y1="65" x2="57" y2="74" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+        <line x1="6" y1="55" x2="15" y2="53" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+        <line x1="65" y1="27" x2="74" y2="25" stroke="#c9a96e" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+      </svg>
+      <div class="home-title">Reset &amp; Rise</div>
+      <div class="home-subtitle">90 Days Glow Up Planner</div>
+      <div class="home-tagline">To become your most organized, disciplined, and radiant self.</div>
+      <div class="home-gold-bar"></div>
+      <div class="home-stats">
+        <div class="home-stat"><div class="home-stat-val">${dayNum}</div><div class="home-stat-label">Day</div></div>
+        <div class="home-stat-sep"></div>
+        <div class="home-stat"><div class="home-stat-val">${90-dayNum}</div><div class="home-stat-label">Days Left</div></div>
+        <div class="home-stat-sep"></div>
+        <div class="home-stat"><div class="home-stat-val">${nnDone}/5</div><div class="home-stat-label">Today</div></div>
+        <div class="home-stat-sep"></div>
+        <div class="home-stat"><div class="home-stat-val">${habitPct}%</div><div class="home-stat-label">Habits</div></div>
+      </div>
+      <div class="home-progress-section">
+        <div class="home-progress-title">Your Journey Progress</div>
+        <div class="home-progress-row">
+          <div class="home-progress-label">90-Day Journey</div>
+          <div class="home-progress-bar-bg"><div class="home-progress-bar-fill" style="width:${dayPct}%"></div></div>
+          <div class="home-progress-pct">${dayPct}%</div>
+        </div>
+        <div class="home-progress-row">
+          <div class="home-progress-label">Monthly Habits</div>
+          <div class="home-progress-bar-bg"><div class="home-progress-bar-fill" style="width:${habitPct}%;background:linear-gradient(90deg,var(--gold),var(--gold-light))"></div></div>
+          <div class="home-progress-pct">${habitPct}%</div>
+        </div>
+        <div class="home-progress-row">
+          <div class="home-progress-label">Non-Negotiables</div>
+          <div class="home-progress-bar-bg"><div class="home-progress-bar-fill" style="width:${nnPct}%;background:linear-gradient(90deg,var(--rose),var(--blush))"></div></div>
+          <div class="home-progress-pct">${nnPct}%</div>
+        </div>
+      </div>
+      <div class="home-quick-nav" style="margin-top:24px">
+        ${quickLinks.map(l=>`
+          <div class="home-quick-card" onclick="navigateTo('${l.id}')">
+            <span class="home-quick-icon">${l.icon}</span>
+            <div class="home-quick-title">${l.title}</div>
+            <div class="home-quick-sub">${l.sub}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="home-quote">
+        <p>"Every time you keep a commitment to yourself, you vote for a new identity."</p>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================
+   SECTION: LIFE AUDIT
+============================ */
+function buildLifeAudit(sec) {
+  const areas = [
+    {id:'health', label:'Health & Energy', sub:'Sleep, movement, nutrition'},
+    {id:'finances', label:'Finances', sub:'Income, savings, expenses, clarity'},
+    {id:'discipline', label:'Discipline & Productivity', sub:'Hours spent on what truly matters'},
+    {id:'relationships', label:'Relationships', sub:'Who lifts me up, who holds me back?'},
+    {id:'environment', label:'Environment', sub:'Living space, workspace, atmosphere'},
+    {id:'mental', label:'Mental & Emotional', sub:'Inner dialogue, peace, identity'},
+  ];
+  sec.innerHTML = `
+    <div class="section-header"><h1>Life Audit</h1><p>Give a score from 1 to 10 for each area</p><div class="gold-line"></div></div>
+    <div class="card">
+      <div style="background:rgba(232,180,160,0.15);border-radius:8px;padding:11px 14px;margin-bottom:18px;font-size:0.8rem;color:var(--text-mid);font-style:italic;">
+        Ask yourself: "If I stay at this level for 3 years — is it acceptable?" If not → priority.
+      </div>
+      ${areas.map(a=>`
+        <div class="audit-row">
+          <div><div class="audit-row-title">${a.label}</div><div class="audit-row-sub">${a.sub}</div></div>
+          <div class="score-dots" id="score-${a.id}"></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  areas.forEach(a => {
+    const wrap = sec.querySelector('#score-'+a.id);
+    const saved = load('audit_'+a.id, 0);
+    for (let i=1;i<=10;i++) {
+      const dot = document.createElement('div');
+      dot.className = 'score-dot' + (saved===i?' selected':'');
+      dot.textContent = i;
+      dot.addEventListener('click', () => {
+        save('audit_'+a.id, i);
+        wrap.querySelectorAll('.score-dot').forEach((d,idx) => d.classList.toggle('selected', idx+1===i));
+      });
+      wrap.appendChild(dot);
+    }
+  });
+}
+
+/* ============================
+   SECTION: PRIORITIES
+============================ */
+function buildPriorities(sec) {
+  sec.innerHTML = `
+    <div class="section-header"><h1>My Priorities</h1><p>My 2 priority areas for these 90 days</p><div class="gold-line"></div></div>
+    <div class="priority-card"><div class="priority-card-label">Priority 1</div><textarea data-key="priority1" placeholder="Describe your first priority area…" style="min-height:90px"></textarea></div>
+    <div class="priority-card"><div class="priority-card-label">Priority 2</div><textarea data-key="priority2" placeholder="Describe your second priority area…" style="min-height:90px"></textarea></div>
+    <div class="quote-card"><p>"Every time you keep a commitment to yourself, you vote for a new identity."</p></div>
+  `;
+  attachAutoSave(sec);
+}
+
+/* ============================
+   SECTION: LETTER
+============================ */
+function buildLetter(sec) {
+  sec.innerHTML = `
+    <div class="section-header"><h1>Letter to Your Future Self</h1><div class="gold-line"></div></div>
+    <div class="card">
+      <div style="background:rgba(90,159,168,0.08);border-radius:8px;padding:13px 16px;margin-bottom:18px;font-size:0.8rem;color:var(--text-mid);">
+        <strong style="color:var(--teal);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase">Instructions</strong><br><br>
+        Write a letter from yourself in 90 days to yourself today. Describe precisely what you're living, what you feel, what you've accomplished. Be obsessively precise. Re-read every morning. This is <em>cognitive anchoring</em>.
+      </div>
+      <textarea data-key="future_letter" placeholder="Dear [your name],&#10;&#10;It's Day 90 and I want to tell you what my life looks like now…" style="min-height:340px;font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:1.7;font-style:italic"></textarea>
+    </div>
+  `;
+  attachAutoSave(sec);
+}
+
+/* ============================
+   SECTION: IDENTITY
+============================ */
+function buildIdentity(sec) {
+  const defaultAffs = ['I am someone who takes action before feeling ready.','I am someone whose discipline is stronger than my current emotions.','','','',''];
+  sec.innerHTML = `
+    <div class="section-header"><h1>Identity & Core Pillars</h1><div class="gold-line"></div></div>
+    <div class="card">
+      <div class="card-title">My Identity Statement</div>
+      <div class="card-sub">Complete: "I am someone who…"</div>
+      <div class="identity-statement">
+        <div class="identity-prefix">I am someone who…</div>
+        <textarea data-key="identity_statement" placeholder="…shows up every day, even on hard days." style="min-height:90px;background:transparent;border:none;border-bottom:1px dashed var(--border);border-radius:0;box-shadow:none;padding:4px 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem"></textarea>
+      </div>
+      <div class="card-title mt-20">My Personalized Affirmations</div>
+      <div class="card-sub">To say out loud every morning. Realistic, not magical.</div>
+      <div id="affirmations-list"></div>
+    </div>
+  `;
+  const list = sec.querySelector('#affirmations-list');
+  for (let i=0;i<6;i++) {
+    const saved = load('affirmation_'+i, defaultAffs[i]||'');
+    const row = document.createElement('div'); row.className='affirmation-item';
+    row.innerHTML=`<div class="aff-circle"></div><input type="text" class="aff-text" placeholder="I am someone who…" value="${saved.replace(/"/g,'&quot;')}">`;
+    const input = row.querySelector('input');
+    input.addEventListener('input', () => save('affirmation_'+i, input.value));
+    list.appendChild(row);
+  }
+  attachAutoSave(sec);
+}
+
+/* ============================
+   SECTION: NON-NEGOTIABLES
+============================ */
+function buildNonNegotiables(sec) {
+  sec.innerHTML = `
+    <div class="section-header"><h1>Non-Negotiables</h1><p>To complete even on bad days. Especially in difficult moments.</p><div class="gold-line"></div></div>
+    <div class="card"><div id="nonneg-list"></div></div>
+    <div class="card mt-16">
+      <div class="card-title">Beliefs to Reprogram</div>
+      <div class="beliefs-grid" id="beliefs-grid">
+        <div>
+          <div class="beliefs-col-header">Limiting Belief</div>
+          ${[0,1,2,3].map(i=>`<div class="input-group"><input type="text" data-key="belief_limit_${i}" placeholder="I'm not capable of…"></div>`).join('')}
+        </div>
+        <div>
+          <div class="beliefs-col-header">New Belief</div>
+          ${[0,1,2,3].map(i=>`<div class="input-group"><input type="text" data-key="belief_new_${i}" placeholder="I am capable of…"></div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="quote-card"><p>"Every time you keep a commitment to yourself, you vote for a new identity."</p></div>
+  `;
+  const list = sec.querySelector('#nonneg-list');
+  for (let i=0;i<5;i++) {
+    const savedText=load('nonneg_text_'+i,''), savedDone=load('nonneg_done_'+i,false);
+    const row=document.createElement('div');
+    row.className='check-item'+(savedDone?' done':'');
+    row.innerHTML=`<div class="custom-check ${savedDone?'checked':''}" data-idx="${i}"></div><span style="font-size:0.78rem;color:var(--text-light);font-weight:500;min-width:18px;flex-shrink:0">${i+1}</span><input type="text" class="check-input" placeholder="My non-negotiable #${i+1}…" value="${savedText.replace(/"/g,'&quot;')}">`;
+    const check=row.querySelector('.custom-check'), input=row.querySelector('input');
+    check.addEventListener('click',()=>{
+      const done=!check.classList.contains('checked');
+      check.classList.toggle('checked',done); row.classList.toggle('done',done);
+      save('nonneg_done_'+i,done);
+    });
+    input.addEventListener('input',()=>save('nonneg_text_'+i,input.value));
+    list.appendChild(row);
+  }
+  attachAutoSave(sec);
+}
+
+/* ============================
+   MONTHLY OVERVIEW
+============================ */
+let monthlyDate = load('monthlyDate', {m:new Date().getMonth(), y:new Date().getFullYear()}) || {m:new Date().getMonth(),y:new Date().getFullYear()};
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS=['M','T','W','Th','F','S','Sun'];
+
+function buildMonthlyOverview(sec) {
+  sec.innerHTML = `
+    <div class="section-header"><h1>Monthly Overview</h1><div class="gold-line"></div></div>
+    <div class="card">
+      <div class="date-nav">
+        <button class="nav-arrow" onclick="changeMonth(-1)">&#8592;</button>
+        <div class="date-nav-title" id="monthly-title"></div>
+        <button class="nav-arrow" onclick="changeMonth(1)">&#8594;</button>
+      </div>
+      <div class="cal-grid" id="monthly-cal"></div>
+      <div style="margin-top:16px"><label>Notes</label><textarea id="monthly-notes" placeholder="Notes for this month…" style="background:rgba(90,159,168,0.06);border-color:var(--teal-muted)"></textarea></div>
+    </div>
+  `;
+  renderMonthlyCalendar(sec);
+  const notesEl=sec.querySelector('#monthly-notes');
+  notesEl.value=load('monthly_notes_'+monthlyDate.y+'_'+monthlyDate.m,'');
+  notesEl.addEventListener('input',()=>save('monthly_notes_'+monthlyDate.y+'_'+monthlyDate.m, notesEl.value));
+}
+
+function renderMonthlyCalendar(sec) {
+  if (!sec) sec=document.getElementById('sec-monthly-overview');
+  const titleEl=sec.querySelector('#monthly-title'), calEl=sec.querySelector('#monthly-cal');
+  if (!titleEl||!calEl) return;
+  titleEl.textContent=MONTHS[monthlyDate.m]+' '+monthlyDate.y;
+  calEl.innerHTML='';
+  DAYS.forEach(d=>{const h=document.createElement('div');h.className='cal-header-cell';h.textContent=d;calEl.appendChild(h);});
+  const firstDay=new Date(monthlyDate.y,monthlyDate.m,1).getDay();
+  const offset=(firstDay+6)%7;
+  const daysInMonth=new Date(monthlyDate.y,monthlyDate.m+1,0).getDate();
+  const today=new Date();
+  for (let i=0;i<offset;i++){const e=document.createElement('div');e.className='cal-cell empty';calEl.appendChild(e);}
+  for (let d=1;d<=daysInMonth;d++) {
+    const cell=document.createElement('div');
+    const isToday=today.getDate()===d&&today.getMonth()===monthlyDate.m&&today.getFullYear()===monthlyDate.y;
+    const hasData=load('daily_pri_'+monthlyDate.y+'_'+monthlyDate.m+'_'+d,null);
+    cell.className='cal-cell'+(isToday?' today':'')+(hasData?' has-data':'');
+    cell.textContent=d;
+    cell.addEventListener('click',()=>{setDailyDate(monthlyDate.y,monthlyDate.m,d);navigateTo('daily-planner');});
+    calEl.appendChild(cell);
+  }
+}
+
+function changeMonth(dir) {
+  monthlyDate.m+=dir;
+  if(monthlyDate.m<0){monthlyDate.m=11;monthlyDate.y--;}
+  if(monthlyDate.m>11){monthlyDate.m=0;monthlyDate.y++;}
+  save('monthlyDate',monthlyDate);
+  const sec=document.getElementById('sec-monthly-overview');
+  renderMonthlyCalendar(sec);
+  const notesEl=sec.querySelector('#monthly-notes');
+  if(notesEl){
+    notesEl.value=load('monthly_notes_'+monthlyDate.y+'_'+monthlyDate.m,'');
+    notesEl.removeEventListener('input',notesEl._listener);
+    notesEl._listener=()=>save('monthly_notes_'+monthlyDate.y+'_'+monthlyDate.m,notesEl.value);
+    notesEl.addEventListener('input',notesEl._listener);
+  }
+}
+
+/* ============================
+   WEEKLY OVERVIEW
+============================ */
+let weeklyDate = load('weeklyDate', getWeekStart(new Date()));
+
+function getWeekStart(d) {
+  const date=new Date(d), day=date.getDay(), diff=(day+6)%7;
+  date.setDate(date.getDate()-diff);
+  return {y:date.getFullYear(),m:date.getMonth(),d:date.getDate()};
+}
+
+function buildWeeklyOverview(sec) {
+  sec.innerHTML=`
+    <div class="section-header"><h1>Weekly Overview</h1><div class="gold-line"></div></div>
+    <div class="card">
+      <div class="date-nav">
+        <button class="nav-arrow" onclick="changeWeek(-1)">&#8592;</button>
+        <div class="date-nav-title" id="weekly-title"></div>
+        <button class="nav-arrow" onclick="changeWeek(1)">&#8594;</button>
+      </div>
+      <div id="weekly-rows" style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden"></div>
+    </div>
+  `;
+  renderWeeklyOverview(sec);
+}
+
+function renderWeeklyOverview(sec) {
+  if(!sec) sec=document.getElementById('sec-weekly-overview');
+  const title=sec.querySelector('#weekly-title'), rows=sec.querySelector('#weekly-rows');
+  if(!title||!rows) return;
+  const start=new Date(weeklyDate.y,weeklyDate.m,weeklyDate.d);
+  const end=new Date(start); end.setDate(end.getDate()+6);
+  title.textContent=`${formatDate(start)} – ${formatDate(end)}`;
+  rows.innerHTML='';
+  const dayLabels=['M','T','W','Th','F','S','Sun'];
+  for(let i=0;i<7;i++){
+    const dayDate=new Date(start); dayDate.setDate(dayDate.getDate()+i);
+    const key=`weekly_${dayDate.getFullYear()}_${dayDate.getMonth()}_${dayDate.getDate()}`;
+    const row=document.createElement('div'); row.className='week-day-row';
+    const label=document.createElement('div'); label.className='week-day-label'; label.innerHTML=`<span>${dayLabels[i]}</span>`;
+    const ta=document.createElement('textarea'); ta.className='week-day-input'; ta.placeholder='Plans, goals, notes…';
+    ta.value=load(key,''); ta.addEventListener('input',()=>save(key,ta.value));
+    row.appendChild(label); row.appendChild(ta); rows.appendChild(row);
+  }
+}
+
+function changeWeek(dir) {
+  const d=new Date(weeklyDate.y,weeklyDate.m,weeklyDate.d); d.setDate(d.getDate()+dir*7);
+  weeklyDate={y:d.getFullYear(),m:d.getMonth(),d:d.getDate()};
+  save('weeklyDate',weeklyDate); renderWeeklyOverview(null);
+}
+
+function formatDate(d) {
+  return MONTHS[d.getMonth()].substring(0,3)+' '+d.getDate()+', '+d.getFullYear();
+}
+
+/* ============================
+   DAILY PLANNER
+============================ */
+let dailyDate = load('dailyDate', {y:new Date().getFullYear(),m:new Date().getMonth(),d:new Date().getDate()});
+
+function setDailyDate(y,m,d){dailyDate={y,m,d};save('dailyDate',dailyDate);rebuildDailyPlanner();}
+
+function buildDailyPlanner(sec) {
+  sec.innerHTML=`
+    <div class="section-header"><h1>Daily Planner</h1><div class="gold-line"></div></div>
+    <div class="card">
+      <div class="date-nav">
+        <button class="nav-arrow" onclick="changeDay(-1)">&#8592;</button>
+        <div class="date-nav-title" id="daily-title"></div>
+        <button class="nav-arrow" onclick="changeDay(1)">&#8594;</button>
+      </div>
+      <div class="daily-layout" id="daily-layout">
+        <div>
+          <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden" id="time-slots"></div>
+        </div>
+        <div id="daily-right">
+          <div class="card" style="margin-bottom:14px">
+            <div class="card-title" style="font-size:1rem">My 3 Priorities</div>
+            <div id="daily-priorities" style="margin-top:10px"></div>
+          </div>
+          <div class="card">
+            <div class="card-title" style="font-size:1rem">What I Accomplished</div>
+            <textarea id="daily-accomplished" placeholder="Today I completed…" style="margin-top:10px;min-height:70px"></textarea>
+          </div>
+          <div class="quote-bubble">
+            <p>Confidence doesn't come from feeling ready. It comes from acting without being ready.</p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="font-size:0.95rem">Notes</div>
+            <textarea id="daily-notes" placeholder="Notes…" style="margin-top:9px;background:rgba(90,159,168,0.06);border-color:var(--teal-muted)"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  rebuildDailyPlanner(sec);
+}
+
+function rebuildDailyPlanner(sec) {
+  if(!sec) sec=document.getElementById('sec-daily-planner');
+  if(!sec) return;
+  const title=sec.querySelector('#daily-title'), slots=sec.querySelector('#time-slots');
+  const prioEl=sec.querySelector('#daily-priorities'), accEl=sec.querySelector('#daily-accomplished'), notesEl=sec.querySelector('#daily-notes');
+  if(!title) return;
+  const date=new Date(dailyDate.y,dailyDate.m,dailyDate.d);
+  title.textContent=date.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const prefix=`daily_${dailyDate.y}_${dailyDate.m}_${dailyDate.d}`;
+  const hours=['6:00','7:00','8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'];
+  slots.innerHTML='';
+  hours.forEach((h,i)=>{
+    const row=document.createElement('div'); row.className='time-slot';
+    const label=document.createElement('div'); label.className='time-label'; label.textContent=h;
+    const input=document.createElement('input'); input.type='text'; input.className='time-input';
+    input.placeholder='…'; input.value=load(prefix+'_time_'+i,'');
+    input.addEventListener('input',()=>save(prefix+'_time_'+i,input.value));
+    row.appendChild(label); row.appendChild(input); slots.appendChild(row);
+  });
+  prioEl.innerHTML='';
+  for(let i=0;i<3;i++){
+    const savedText=load(prefix+'_prio_text_'+i,''), savedDone=load(prefix+'_prio_done_'+i,false);
+    const row=document.createElement('div'); row.className='priority-item';
+    const circle=document.createElement('div'); circle.className='p-circle'+(savedDone?' done':'');
+    circle.addEventListener('click',()=>{
+      const d=!circle.classList.contains('done');
+      circle.classList.toggle('done',d); save(prefix+'_prio_done_'+i,d);
+      input.style.textDecoration=d?'line-through':'none';
+      input.style.color=d?'var(--text-light)':'var(--text-dark)';
+    });
+    const input=document.createElement('input'); input.type='text'; input.className='check-input';
+    input.placeholder=`Priority ${i+1}…`; input.value=savedText;
+    input.style.textDecoration=savedDone?'line-through':'none';
+    input.style.color=savedDone?'var(--text-light)':'var(--text-dark)';
+    input.addEventListener('input',()=>{save(prefix+'_prio_text_'+i,input.value);save(prefix+'_pri_'+dailyDate.m+'_'+dailyDate.d,true);});
+    row.appendChild(circle); row.appendChild(input); prioEl.appendChild(row);
+  }
+  if(accEl){accEl.value=load(prefix+'_accomplished','');accEl.addEventListener('input',()=>save(prefix+'_accomplished',accEl.value));}
+  if(notesEl){notesEl.value=load(prefix+'_notes','');notesEl.addEventListener('input',()=>save(prefix+'_notes',notesEl.value));}
+}
+
+function changeDay(dir){
+  const d=new Date(dailyDate.y,dailyDate.m,dailyDate.d); d.setDate(d.getDate()+dir);
+  dailyDate={y:d.getFullYear(),m:d.getMonth(),d:d.getDate()};
+  save('dailyDate',dailyDate); rebuildDailyPlanner(null);
+}
+
+/* ============================
+   WORKOUT
+============================ */
+let workoutMonth = load('workoutMonth', {m:new Date().getMonth(),y:new Date().getFullYear()});
+const WEEK_DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+function buildWorkout(sec) {
+  sec.innerHTML=`
+    <div class="section-header"><h1>Monthly Workout</h1><div class="gold-line"></div></div>
+    <div class="card">
+      <div class="date-nav" style="margin-bottom:14px">
+        <button class="nav-arrow" onclick="changeWorkoutMonth(-1)">&#8592;</button>
+        <div class="date-nav-title" id="workout-month-title"></div>
+        <button class="nav-arrow" onclick="changeWorkoutMonth(1)">&#8594;</button>
+      </div>
+      <div class="workout-table-wrap"><table class="workout-table" id="workout-table"></table></div>
+    </div>
+  `;
+  renderWorkoutTable(sec);
+}
+
+function renderWorkoutTable(sec) {
+  if(!sec) sec=document.getElementById('sec-workout');
+  const title=sec.querySelector('#workout-month-title'), table=sec.querySelector('#workout-table');
+  if(!title||!table) return;
+  title.textContent=MONTHS[workoutMonth.m]+' '+workoutMonth.y;
+  const prefix=`workout_${workoutMonth.y}_${workoutMonth.m}`;
+  table.innerHTML=`<thead><tr><th>Day</th><th>Week 1</th><th>Week 2</th><th>Week 3</th><th>Week 4</th></tr></thead>`;
+  const tbody=document.createElement('tbody');
+  WEEK_DAYS.forEach((day,di)=>{
+    const tr=document.createElement('tr');
+    const td0=document.createElement('td'); td0.textContent=day.substring(0,3); tr.appendChild(td0);
+    for(let w=0;w<4;w++){
+      const td=document.createElement('td');
+      const ta=document.createElement('textarea'); ta.className='wk-cell-input'; ta.placeholder='...';
+      ta.value=load(`${prefix}_${di}_${w}`,'');
+      ta.addEventListener('input',()=>save(`${prefix}_${di}_${w}`,ta.value));
+      td.appendChild(ta); tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+}
+
+function changeWorkoutMonth(dir){
+  workoutMonth.m+=dir;
+  if(workoutMonth.m<0){workoutMonth.m=11;workoutMonth.y--;}
+  if(workoutMonth.m>11){workoutMonth.m=0;workoutMonth.y++;}
+  save('workoutMonth',workoutMonth); renderWorkoutTable(null);
+}
+
+/* ============================
+   MEAL PLAN
+============================ */
+let mealWeek = load('mealWeek', getWeekStart(new Date()));
+
+function buildMealPlan(sec) {
+  sec.innerHTML=`
+    <div class="section-header"><h1>Weekly Meal Plan</h1><div class="gold-line"></div></div>
+    <div class="card">
+      <div class="date-nav" style="margin-bottom:14px">
+        <button class="nav-arrow" onclick="changeMealWeek(-1)">&#8592;</button>
+        <div class="date-nav-title" id="meal-week-title"></div>
+        <button class="nav-arrow" onclick="changeMealWeek(1)">&#8594;</button>
+      </div>
+      <div class="meal-table-wrap"><table class="meal-table" id="meal-table"></table></div>
+    </div>
+  `;
+  renderMealTable(sec);
+}
+
+function renderMealTable(sec) {
+  if(!sec) sec=document.getElementById('sec-meal-plan');
+  const title=sec.querySelector('#meal-week-title'), table=sec.querySelector('#meal-table');
+  if(!title||!table) return;
+  const start=new Date(mealWeek.y,mealWeek.m,mealWeek.d);
+  const end=new Date(start); end.setDate(end.getDate()+6);
+  title.textContent=`${formatDate(start)} – ${formatDate(end)}`;
+  const prefix=`meal_${mealWeek.y}_${mealWeek.m}_${mealWeek.d}`;
+  table.innerHTML=`<thead><tr><th></th><th>Breakfast</th><th>Lunch</th><th>Dinner</th></tr></thead>`;
+  const tbody=document.createElement('tbody');
+  for(let i=0;i<7;i++){
+    const tr=document.createElement('tr');
+    const td0=document.createElement('td'); td0.textContent=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]; tr.appendChild(td0);
+    [0,1,2].forEach(mi=>{
+      const td=document.createElement('td');
+      const ta=document.createElement('textarea'); ta.className='meal-input'; ta.placeholder='...';
+      const key=`${prefix}_${i}_${mi}`; ta.value=load(key,'');
+      ta.addEventListener('input',()=>save(key,ta.value));
+      td.appendChild(ta); tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+}
+
+function changeMealWeek(dir){
+  const d=new Date(mealWeek.y,mealWeek.m,mealWeek.d); d.setDate(d.getDate()+dir*7);
+  mealWeek={y:d.getFullYear(),m:d.getMonth(),d:d.getDate()};
+  save('mealWeek',mealWeek); renderMealTable(null);
+}
+
+/* ============================
+   GROCERY
+============================ */
+function buildGrocery(sec) {
+  const cols=[{id:'meat',label:'Meat / Seafood'},{id:'veggie',label:'Fruit / Veggies'},{id:'dairy',label:'Dairy'},{id:'bread',label:'Bread / Cereals'},{id:'canned',label:'Canned Goods'},{id:'frozen',label:'Frozen Foods'}];
+  sec.innerHTML=`
+    <div class="section-header"><h1>Grocery List</h1><div class="gold-line"></div></div>
+    <div class="card">
+      <div class="grocery-grid" id="grocery-grid"></div>
+      <div class="divider"></div>
+      <div class="grocery-col-title" style="color:var(--gold-dark)">Others</div>
+      <div id="grocery-others"></div>
+    </div>
+  `;
+  const grid=sec.querySelector('#grocery-grid');
+  cols.forEach(col=>{
+    const div=document.createElement('div');
+    div.innerHTML=`<div class="grocery-col-title">${col.label}</div>`;
+    for(let i=0;i<6;i++){
+      const key=`grocery_${col.id}_${i}`, keyDone=`grocery_${col.id}_done_${i}`;
+      const item=document.createElement('div'); item.className='grocery-item';
+      const check=document.createElement('div');
+      check.className='g-check'+(load(keyDone,false)?' checked':'');
+      const inp=document.createElement('input'); inp.type='text'; inp.className='g-input'; inp.placeholder='Item…';
+      inp.value=load(key,''); inp.style.textDecoration=load(keyDone,false)?'line-through':'none';
+      check.addEventListener('click',()=>{const done=!check.classList.contains('checked');check.classList.toggle('checked',done);save(keyDone,done);inp.style.textDecoration=done?'line-through':'none';});
+      inp.addEventListener('input',()=>save(key,inp.value));
+      item.appendChild(check); item.appendChild(inp); div.appendChild(item);
+    }
+    grid.appendChild(div);
+  });
+  const others=sec.querySelector('#grocery-others');
+  for(let i=0;i<5;i++){
+    const key=`grocery_other_${i}`, keyDone=`grocery_other_done_${i}`;
+    const item=document.createElement('div'); item.className='grocery-item'; item.style.marginBottom='8px';
+    const check=document.createElement('div');
+    check.className='g-check'+(load(keyDone,false)?' checked':'');
+    const inp=document.createElement('input'); inp.type='text'; inp.className='g-input'; inp.placeholder='Other item…';
+    inp.value=load(key,''); inp.style.textDecoration=load(keyDone,false)?'line-through':'none';
+    check.addEventListener('click',()=>{const done=!check.classList.contains('checked');check.classList.toggle('checked',done);save(keyDone,done);inp.style.textDecoration=done?'line-through':'none';});
+    inp.addEventListener('input',()=>save(key,inp.value));
+    item.appendChild(check); item.appendChild(inp); others.appendChild(item);
+  }
+}
+
+/* ============================
+   CLEANING TRACKER
+============================ */
+function buildCleaning(sec) {
+  const rooms=[{id:'kitchen',label:'Kitchen',color:'var(--teal)'},{id:'bathroom',label:'Bathroom',color:'var(--rose)'},{id:'bedroom',label:'Bedroom',color:'var(--sage)'},{id:'entrance',label:'Entrance',color:'var(--gold)'},{id:'living',label:'Living Room',color:'var(--gold-dark)'},{id:'other1',label:'Other',color:'var(--text-light)'}];
+  const dayLabels=['M','T','W','Th','F','S','Su'];
+  sec.innerHTML=`
+    <div class="section-header"><h1>Cleaning Tracker</h1><div class="gold-line"></div></div>
+    <div class="card">
+      <div class="cleaning-table-wrap">
+        <table class="cleaning-table" id="cleaning-table">
+          <colgroup>
+            <col class="col-room"><col class="col-task">
+            <col class="col-day"><col class="col-day"><col class="col-day"><col class="col-day"><col class="col-day"><col class="col-day"><col class="col-day">
+          </colgroup>
+          <thead><tr>
+            <th style="text-align:left">Room</th>
+            <th style="text-align:left">Task</th>
+            ${dayLabels.map(d=>`<th>${d}</th>`).join('')}
+          </tr></thead>
+          <tbody id="cleaning-body"></tbody>
+        </table>
+      </div>
+    </div>
+  `;
+  const body=sec.querySelector('#cleaning-body');
+  rooms.forEach(room=>{
+    for(let row=0;row<4;row++){
+      const tr=document.createElement('tr');
+      if(row===0){
+        const td0=document.createElement('td'); td0.rowSpan=4; td0.className='cell-room';
+        td0.style.cssText=`font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;color:${room.color};font-weight:600;`;
+        td0.textContent=room.label; tr.appendChild(td0);
+      }
+      const td1=document.createElement('td'); td1.className='cell-task';
+      const taskInput=document.createElement('input'); taskInput.type='text'; taskInput.className='clean-task-input'; taskInput.placeholder='Task…';
+      const taskKey=`clean_${room.id}_task_${row}`; taskInput.value=load(taskKey,'');
+      taskInput.addEventListener('input',()=>save(taskKey,taskInput.value));
+      td1.appendChild(taskInput); tr.appendChild(td1);
+      for(let d=0;d<7;d++){
+        const td=document.createElement('td'); td.className='cell-day';
+        const check=document.createElement('div'); check.className='day-check';
+        const checkKey=`clean_${room.id}_check_${row}_${d}`;
+        if(load(checkKey,false)) check.classList.add('checked');
+        check.addEventListener('click',()=>{const done=!check.classList.contains('checked');check.classList.toggle('checked',done);save(checkKey,done);});
+        td.appendChild(check); tr.appendChild(td);
+      }
+      body.appendChild(tr);
+    }
+  });
+}
+
+/* ============================
+   MOOD TRACKER
+============================ */
+const MOODS=[{id:'angry',label:'Angry / Irritable',color:'#e05555'},{id:'anxious',label:'Anxious / Stressed',color:'#6db87a'},{id:'energetic',label:'Energetic / Dynamic',color:'#f0c840'},{id:'calm',label:'Calm / Zen',color:'#9b86c8'},{id:'happy',label:'Happy / Overjoyed',color:'#e87abf'},{id:'productive',label:'Productive / Motivated',color:'#e8924a'},{id:'sad',label:'Sad / Gloomy',color:'#6090d0'},{id:'tired',label:'Tired / Exhausted',color:'#b0b0b0'}];
+let moodMonth=load('moodMonth',{m:new Date().getMonth(),y:new Date().getFullYear()});
+let selectedMoodColor=MOODS[0].color;
+
+function buildMood(sec) {
+  sec.innerHTML=`
+    <div class="section-header"><h1>Mood Tracker</h1><div class="gold-line"></div></div>
+    <div class="card">
+      <div class="date-nav">
+        <button class="nav-arrow" onclick="changeMoodMonth(-1)">&#8592;</button>
+        <div class="date-nav-title" id="mood-month-title"></div>
+        <button class="nav-arrow" onclick="changeMoodMonth(1)">&#8594;</button>
+      </div>
+      <div id="selected-day-display"></div>
+      <div class="mood-palette" id="mood-palette"></div>
+      <div class="mood-grid" id="mood-grid"></div>
+      <div class="mood-legend" id="mood-legend"></div>
+    </div>
+  `;
+  const palette=sec.querySelector('#mood-palette');
+  MOODS.forEach(mood=>{
+    const btn=document.createElement('div');
+    btn.className='mood-palette-btn'+(selectedMoodColor===mood.color?' selected':'');
+    btn.style.color=mood.color;
+    btn.innerHTML=`<span class="mood-legend-dot" style="background:${mood.color}"></span>${mood.label}`;
+    btn.addEventListener('click',()=>{selectedMoodColor=mood.color;sec.querySelectorAll('.mood-palette-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');});
+    palette.appendChild(btn);
+  });
+  const legend=sec.querySelector('#mood-legend');
+  MOODS.forEach(mood=>{const item=document.createElement('div');item.className='mood-legend-item';item.innerHTML=`<span class="mood-legend-dot" style="background:${mood.color}"></span>${mood.label}`;legend.appendChild(item);});
+  renderMoodGrid(sec);
+}
+
+function renderMoodGrid(sec) {
+  if(!sec) sec=document.getElementById('sec-mood');
+  const title=sec.querySelector('#mood-month-title'), grid=sec.querySelector('#mood-grid');
+  if(!title||!grid) return;
+  title.textContent=MONTHS[moodMonth.m]+' '+moodMonth.y;
+  grid.innerHTML='';
+  const daysInMonth=new Date(moodMonth.y,moodMonth.m+1,0).getDate();
+  for(let d=1;d<=daysInMonth;d++){
+    const cell=document.createElement('div'); cell.className='mood-cell';
+    const moodKey=`mood_${moodMonth.y}_${moodMonth.m}_${d}`;
+    const savedColor=load(moodKey,'');
+    const num=document.createElement('div'); num.className='mood-day-num'; num.textContent=d;
+    const dot=document.createElement('div'); dot.className='mood-color-dot';
+    if(savedColor){dot.style.background=savedColor;cell.style.borderColor=savedColor+'66';}
+    cell.addEventListener('click',()=>{
+      save(moodKey,selectedMoodColor); dot.style.background=selectedMoodColor; cell.style.borderColor=selectedMoodColor+'66';
+      const dayDisp=sec.querySelector('#selected-day-display');
+      if(dayDisp){const moodName=MOODS.find(m=>m.color===selectedMoodColor)?.label||'';dayDisp.textContent=`Day ${d} — ${moodName}`;}
+    });
+    cell.appendChild(num); cell.appendChild(dot); grid.appendChild(cell);
+  }
+}
+
+function changeMoodMonth(dir){
+  moodMonth.m+=dir;
+  if(moodMonth.m<0){moodMonth.m=11;moodMonth.y--;} if(moodMonth.m>11){moodMonth.m=0;moodMonth.y++;}
+  save('moodMonth',moodMonth); renderMoodGrid(null);
+}
+
+/* ============================
+   HABIT TRACKER
+============================ */
+const PRESET_HABITS=['Drink at least 8 glasses of water','Less than 3 hours on phone','Exercise for at least 1 hour','Eat fruits and vegetables','Eat at least 5 fruits or vegetables'];
+let habitMonth=load('habitMonth',{m:new Date().getMonth(),y:new Date().getFullYear()});
+
+function buildHabits(sec) {
+  sec.innerHTML=`
+    <div class="section-header"><h1>Habit Tracker</h1><div class="gold-line"></div></div>
+    <div class="card">
+      <div class="date-nav">
+        <button class="nav-arrow" onclick="changeHabitMonth(-1)">&#8592;</button>
+        <div class="date-nav-title" id="habit-month-title"></div>
+        <button class="nav-arrow" onclick="changeHabitMonth(1)">&#8594;</button>
+      </div>
+      <div id="habit-progress" class="progress-wrap"></div>
+      <div class="habit-table-wrap"><table class="habit-table" id="habit-table"></table></div>
+    </div>
+  `;
+  renderHabitTable(sec);
+}
+
+function renderHabitTable(sec) {
+  if(!sec) sec=document.getElementById('sec-habits');
+  const title=sec.querySelector('#habit-month-title'), table=sec.querySelector('#habit-table'), progressWrap=sec.querySelector('#habit-progress');
+  if(!title||!table) return;
+  title.textContent=MONTHS[habitMonth.m]+' '+habitMonth.y;
+  const daysInMonth=new Date(habitMonth.y,habitMonth.m+1,0).getDate();
+  const numHabits=10, prefix=`habit_${habitMonth.y}_${habitMonth.m}`;
+  let thead=`<tr><th style="text-align:left">Habit</th>`;
+  for(let d=1;d<=daysInMonth;d++) thead+=`<th>${d}</th>`;
+  thead+=`</tr>`;
+  table.innerHTML=`<thead>${thead}</thead>`;
+  const tbody=document.createElement('tbody');
+  let totalChecks=0, totalPossible=0;
+  for(let h=0;h<numHabits;h++){
+    const tr=document.createElement('tr');
+    const tdName=document.createElement('td');
+    const inp=document.createElement('input'); inp.type='text';
+    const nameKey=`${prefix}_habit_name_${h}`;
+    const savedName=load(nameKey,h<PRESET_HABITS.length?PRESET_HABITS[h]:'');
+    inp.value=savedName; inp.placeholder=h<PRESET_HABITS.length?PRESET_HABITS[h]:`Habit ${h+1}…`;
+    inp.className=h<PRESET_HABITS.length?'habit-name-input preset-habit':'habit-name-input';
+    inp.addEventListener('input',()=>save(nameKey,inp.value));
+    tdName.appendChild(inp); tr.appendChild(tdName);
+    for(let d=1;d<=daysInMonth;d++){
+      const td=document.createElement('td');
+      const checkKey=`${prefix}_h${h}_d${d}`, checked=load(checkKey,false);
+      if(checked) totalChecks++; totalPossible++;
+      const check=document.createElement('div'); check.className='habit-check'+(checked?' checked':'');
+      check.addEventListener('click',()=>{const done=!check.classList.contains('checked');check.classList.toggle('checked',done);save(checkKey,done);updateHabitProgress(sec,prefix,daysInMonth,numHabits);});
+      td.appendChild(check); tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+  if(progressWrap){
+    const pct=totalPossible>0?Math.round(totalChecks/totalPossible*100):0;
+    progressWrap.innerHTML=`<div class="progress-label"><span>Monthly Progress</span><span>${pct}%</span></div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>`;
+  }
+}
+
+function updateHabitProgress(sec,prefix,daysInMonth,numHabits){
+  if(!sec) sec=document.getElementById('sec-habits');
+  let total=0,done=0;
+  for(let h=0;h<numHabits;h++) for(let d=1;d<=daysInMonth;d++){total++;if(load(`${prefix}_h${h}_d${d}`,false))done++;}
+  const pct=total>0?Math.round(done/total*100):0;
+  const pw=sec.querySelector('#habit-progress');
+  if(pw) pw.innerHTML=`<div class="progress-label"><span>Monthly Progress</span><span>${pct}%</span></div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>`;
+}
+
+function changeHabitMonth(dir){
+  habitMonth.m+=dir;
+  if(habitMonth.m<0){habitMonth.m=11;habitMonth.y--;} if(habitMonth.m>11){habitMonth.m=0;habitMonth.y++;}
+  save('habitMonth',habitMonth); renderHabitTable(null);
+}
+
+/* ============================
+   FINANCIAL AUDIT
+============================ */
+function buildFinancial(sec) {
+  sec.innerHTML=`
+    <div class="section-header"><h1>Financial Audit</h1><p>Clarity first. Not motivation. Not the perfect budget.</p><div class="gold-line"></div></div>
+    <div class="lever-card">
+      <div class="lever-title">⚡ Lever 1 — Brutal Clarity</div>
+      <div class="money-grid">
+        <div class="input-group"><label>Monthly Net Income</label><div class="small-currency-wrap"><input type="number" data-key="fin_income" placeholder="0"><span class="small-currency">€</span></div></div>
+        <div class="input-group"><label>Total Fixed Expenses</label><div class="small-currency-wrap"><input type="number" data-key="fin_expenses" placeholder="0"><span class="small-currency">€</span></div></div>
+      </div>
+      <div style="font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:10px">My 3 Money Leaks</div>
+      ${[1,2,3].map(i=>`
+        <div class="money-leak-row">
+          <div class="leak-num">${i}</div>
+          <input type="text" data-key="fin_leak_name_${i}" placeholder="e.g. Food delivery…">
+          <div class="small-currency-wrap"><input type="number" data-key="fin_leak_amt_${i}" placeholder="0" style="padding-right:26px"><span class="small-currency">€</span></div>
+        </div>
+      `).join('')}
+      <div class="eliminate-note">💡 Eliminate 2 (not all — two). Financial perfectionism is the enemy of financial progress.</div>
+    </div>
+    <div class="lever-card">
+      <div class="lever-title">💼 Lever 2 — Monetize What I Can Do</div>
+      <div style="font-size:0.76rem;font-style:italic;color:var(--text-light);margin-bottom:14px">Writing, design, coaching, languages, cooking, coding… One client in 90 days changes your mental trajectory.</div>
+      <div class="input-group"><label>My Monetizable Skill</label><input type="text" data-key="fin_skill" placeholder="e.g. Graphic design, language tutoring…"></div>
+      <div class="input-group"><label>First Potential Client / First Action</label><input type="text" data-key="fin_first_client" placeholder="Who I will contact and when…"></div>
+      <div class="input-group"><label>Income Goal by Day 90</label><div class="small-currency-wrap"><input type="number" data-key="fin_income_goal" placeholder="0"><span class="small-currency">€</span></div></div>
+    </div>
+    <div class="lever-card">
+      <div class="lever-title">💰 Lever 3 — Automatic Savings First</div>
+      <div style="font-size:0.76rem;font-style:italic;color:var(--text-light);margin-bottom:14px">Transfer 10% of your income on payday, before any spending.</div>
+      <div class="money-grid">
+        <div class="input-group"><label>Monthly Amount (10%)</label><div class="small-currency-wrap"><input type="number" data-key="fin_savings_monthly" placeholder="0"><span class="small-currency">€</span></div></div>
+        <div class="input-group"><label>Savings Goal by Day 90</label><div class="small-currency-wrap"><input type="number" data-key="fin_savings_goal" placeholder="0"><span class="small-currency">€</span></div></div>
+      </div>
+    </div>
+  `;
+  attachAutoSave(sec);
+}
+
+/* ============================
+   BUDGET TRACKER
+============================ */
+function buildBudget(sec) {
+  const numRows=14;
+  sec.innerHTML=`
+    <div class="section-header"><h1>Budget Tracker</h1><div class="gold-line"></div></div>
+    <div class="card">
+      <div class="budget-layout">
+        <div>
+          <div class="budget-col-title">💰 Income</div>
+          ${[...Array(numRows)].map((_,i)=>`<div class="budget-row"><input type="text" data-key="budget_inc_date_${i}" placeholder="Date" style="font-size:14px"><input type="text" data-key="budget_inc_desc_${i}" placeholder="Description" style="font-size:14px"><div class="small-currency-wrap"><input type="number" data-key="budget_inc_amt_${i}" placeholder="0" style="font-size:14px;padding-right:20px"><span class="small-currency" style="font-size:0.7rem">€</span></div></div>`).join('')}
+          <div style="margin-top:7px;text-align:right;font-size:0.78rem;color:var(--gold-dark)">Total: <strong id="budget-total-inc">€0</strong></div>
+        </div>
+        <div>
+          <div class="budget-col-title" style="color:var(--rose)">💸 Expenses</div>
+          ${[...Array(numRows)].map((_,i)=>`<div class="budget-row"><input type="text" data-key="budget_exp_date_${i}" placeholder="Date" style="font-size:14px"><input type="text" data-key="budget_exp_desc_${i}" placeholder="Description" style="font-size:14px"><div class="small-currency-wrap"><input type="number" data-key="budget_exp_amt_${i}" placeholder="0" style="font-size:14px;padding-right:20px"><span class="small-currency" style="font-size:0.7rem">€</span></div></div>`).join('')}
+          <div style="margin-top:7px;text-align:right;font-size:0.78rem;color:var(--rose)">Total: <strong id="budget-total-exp">€0</strong></div>
+        </div>
+      </div>
+      <div class="budget-summary">
+        <div class="budget-summary-title">Summary</div>
+        <div class="summary-row"><span>Total Income</span><span class="summary-val" id="sum-income">€0</span></div>
+        <div class="summary-row"><span>Total Expenses</span><span class="summary-val" id="sum-exp">€0</span></div>
+        <div class="summary-row"><span>Difference</span><span class="summary-val" id="sum-diff">€0</span></div>
+      </div>
+      <div class="savings-box mt-16">
+        <div class="savings-box-label">Total Money Saved</div>
+        <div class="savings-box-val" id="savings-display">€0</div>
+      </div>
+    </div>
+  `;
+  attachAutoSave(sec);
+  updateBudgetTotals(sec,numRows);
+  sec.querySelectorAll('[data-key^="budget_"]').forEach(el=>el.addEventListener('input',()=>updateBudgetTotals(sec,numRows)));
+}
+
+function updateBudgetTotals(sec,numRows){
+  if(!sec) sec=document.getElementById('sec-budget');
+  let totalInc=0, totalExp=0;
+  for(let i=0;i<numRows;i++){totalInc+=parseFloat(load('budget_inc_amt_'+i,0)||0);totalExp+=parseFloat(load('budget_exp_amt_'+i,0)||0);}
+  const diff=totalInc-totalExp;
+  const setEl=(id,val)=>{const el=sec.querySelector('#'+id);if(el)el.textContent='€'+val.toFixed(2);};
+  setEl('budget-total-inc',totalInc); setEl('budget-total-exp',totalExp);
+  setEl('sum-income',totalInc); setEl('sum-exp',totalExp); setEl('sum-diff',diff);
+  const savingsEl=sec.querySelector('#savings-display');
+  if(savingsEl) savingsEl.textContent='€'+Math.max(0,diff).toFixed(2);
+}
+
+/* ============================
+   CONFIDENCE BANK
+============================ */
+function buildConfidence(sec) {
+  const numRows=14;
+  sec.innerHTML=`
+    <div class="section-header"><h1>Confidence Bank</h1><p>Confidence doesn't come before action. It comes from it. Every win is a deposit.</p><div class="gold-line"></div></div>
+    <div class="card">
+      <div style="background:rgba(201,169,110,0.08);border-radius:8px;padding:13px 16px;margin-bottom:18px;font-size:0.8rem;color:var(--text-mid);">
+        <strong style="color:var(--gold-dark)">Bandura's Principle:</strong> Self-efficacy is built through wins, even small ones.
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr 1fr;gap:10px;padding:7px 0;border-bottom:2px solid var(--border);margin-bottom:6px">
+        <div style="font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light)">Date</div>
+        <div style="font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light)">Win Accomplished</div>
+        <div style="font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light)">How I Felt</div>
+      </div>
+      <div id="confidence-rows"></div>
+    </div>
+  `;
+  const rows=sec.querySelector('#confidence-rows');
+  for(let i=0;i<numRows;i++){
+    const row=document.createElement('div'); row.className='conf-row';
+    row.innerHTML=`<input type="text" data-key="conf_date_${i}" placeholder="—/—" style="font-size:14px"><input type="text" data-key="conf_win_${i}" placeholder="What I achieved…"><input type="text" data-key="conf_felt_${i}" placeholder="Proud, motivated…">`;
+    rows.appendChild(row);
+  }
+  attachAutoSave(sec);
+}
+
+/* ============================
+   RELAPSE LOG
+============================ */
+function buildRelapse(sec) {
+  sec.innerHTML=`
+    <div class="section-header"><h1>Relapse &amp; Bounce-Back Log</h1><p>Relapses are part of the process. What matters is how quickly you bounce back.</p><div class="gold-line"></div></div>
+    <div class="protocol-steps">
+      <div style="font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:9px;font-weight:600">The Bounce-Back Protocol (5 Steps)</div>
+      ${[['OBSERVE','without judging yourself. What happened? Identify the trigger.'],['REFUSE','the guilt spiral. Shame doesn\'t create change. It creates avoidance.'],['RESTART','with one single non-negotiable. Not five. One. Rebuild momentum.'],['APPLY','the 24-hour rule: a relapse doesn\'t last more than one day.'],['USE','the relapse as data. What does it teach you about your limits?']].map(([b,t],i)=>`<div class="protocol-step"><div class="step-num">${i+1}</div><div><strong>${b}</strong> ${t}</div></div>`).join('')}
+    </div>
+    <div id="relapse-entries"></div>
+  `;
+  const entries=sec.querySelector('#relapse-entries');
+  for(let i=0;i<3;i++){
+    const card=document.createElement('div'); card.className='relapse-card';
+    card.innerHTML=`
+      <div class="relapse-dates">
+        <div class="relapse-date-field"><span class="relapse-date-label">Date:</span><input type="text" data-key="relapse_date_${i}" placeholder="—/—" style="max-width:90px"></div>
+        <div class="relapse-date-field"><span class="relapse-date-label">Restarted on:</span><input type="text" data-key="relapse_restart_${i}" placeholder="—/—" style="max-width:90px"></div>
+      </div>
+      <div class="input-group"><label style="color:var(--gold-dark)">What Happened / Trigger</label><input type="text" data-key="relapse_trigger_${i}" placeholder="What led to the relapse…"></div>
+      <div class="input-group"><label style="color:var(--teal)">What It Teaches Me</label><input type="text" data-key="relapse_lesson_${i}" placeholder="What this reveals about my patterns…"></div>
+    `;
+    entries.appendChild(card);
+  }
+  attachAutoSave(sec);
+}
+
+/* ============================
+   SELF-SABOTAGE
+============================ */
+function buildSabotage(sec) {
+  sec.innerHTML=`
+    <div class="section-header"><h1>Self-Sabotage Journal</h1><p>Self-sabotage is not conscious self-destruction. It's an unconscious protection mechanism.</p><div class="gold-line"></div></div>
+    <div class="card" style="margin-bottom:16px">
+      <div style="background:rgba(90,159,168,0.08);border-radius:8px;padding:13px 16px;font-size:0.8rem;color:var(--text-mid)">
+        <strong style="color:var(--teal)">Identify &amp; Break the Pattern</strong><br><br>
+        1. Notice the pattern: When exactly do you sabotage yourself?<br>
+        2. Identify the belief: "If I succeed, people will envy me." "I don't deserve this."<br>
+        3. Byron Katie's question: "Is this belief absolutely true?" (99%: no)<br>
+        4. Replace it with a concrete action, not an affirmation.
+      </div>
+    </div>
+    <div id="sabotage-entries"></div>
+  `;
+  const entries=sec.querySelector('#sabotage-entries');
+  for(let i=0;i<3;i++){
+    const card=document.createElement('div'); card.className='sabotage-card';
+    card.innerHTML=`
+      <div class="input-group"><label>Situation / Observed Pattern</label><textarea data-key="sab_situation_${i}" placeholder="When I'm about to…" style="min-height:55px"></textarea></div>
+      <div class="sabotage-2col">
+        <div><div class="sabotage-col-title belief-col">Underlying Belief</div><textarea data-key="sab_belief_${i}" placeholder="I believe that…" style="min-height:55px;border-color:var(--border)"></textarea></div>
+        <div><div class="sabotage-col-title action-col">Concrete Replacement Action</div><textarea data-key="sab_action_${i}" placeholder="Instead, I will immediately…" style="min-height:55px;border-color:var(--teal-muted)"></textarea></div>
+      </div>
+    `;
+    entries.appendChild(card);
+  }
+  attachAutoSave(sec);
+}
+
+/* ============================
+   ASSESSMENTS
+============================ */
+const AREA_LABELS=[{id:'health',label:'Health',icon:'☀️'},{id:'finances',label:'Finances',icon:'💰'},{id:'discipline',label:'Discipline',icon:'⚡'},{id:'relationships',label:'Relationships',icon:'💛'},{id:'surroundings',label:'Surroundings',icon:'🏠'},{id:'mindset',label:'Mindset',icon:'🧠'}];
+
+function buildAssessSection(sec,day,subtitle,noteLabel,extraField) {
+  sec.innerHTML=`
+    <div class="section-header"><h1>Assessment — Day ${day}</h1><p>${subtitle}</p><div class="gold-line"></div></div>
+    <div class="assess-top">
+      <div class="assess-box">
+        <div class="assess-box-label">Days Completed</div>
+        <input type="number" data-key="assess${day}_days" placeholder="—" style="text-align:center;font-size:1.4rem;border:none;background:transparent;font-family:'Cormorant Garamond',serif;font-weight:300" max="${day}" min="0">
+        <div class="assess-box-sub">/ ${day}</div>
+      </div>
+      ${extraField}
+      <div class="assess-box">
+        <div class="assess-box-label">${noteLabel} / 10</div>
+        <input type="number" data-key="assess${day}_energy" placeholder="—" style="text-align:center;font-size:1.4rem;border:none;background:transparent;font-family:'Cormorant Garamond',serif;font-weight:300" max="10" min="0">
+        <div class="assess-box-sub">vs — at the start</div>
+      </div>
+    </div>
+    <div class="assess-2col">
+      <div>
+        <div style="font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:10px;font-weight:600">What Worked</div>
+        <textarea data-key="assess${day}_worked" placeholder="What strategies and habits proved effective…" style="min-height:90px"></textarea>
+        <div style="font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--teal);margin-top:14px;margin-bottom:10px;font-weight:600">What I'm Adjusting</div>
+        <textarea data-key="assess${day}_adjusting" placeholder="What I'll do differently next month…" style="min-height:72px"></textarea>
+      </div>
+      <div>
+        <div style="font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;font-weight:600">Areas Reassessment</div>
+        <div class="assess-areas">
+          ${AREA_LABELS.map(a=>`
+            <div class="area-row">
+              <span class="area-label">${a.icon} ${a.label}</span>
+              <div class="area-scores">
+                <input type="number" class="score-mini-input" data-key="assess${day}_area_${a.id}_start" placeholder="—" min="1" max="10">
+                <span class="area-arrow">→</span>
+                <input type="number" class="score-mini-input" data-key="assess${day}_area_${a.id}_end" placeholder="—" min="1" max="10">
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div style="margin-top:14px;background:rgba(232,180,160,0.12);border-radius:8px;padding:13px">
+          <div style="font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose);margin-bottom:9px;font-weight:600">My Biggest Pride</div>
+          <textarea data-key="assess${day}_pride" placeholder="This month I am most proud of…" style="min-height:60px;background:transparent;border:none;border-bottom:1px dashed var(--rose-light);border-radius:0;box-shadow:none"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="font-size:1.05rem">${day===90?'Closure Letter':`Intention for Month ${Math.round(day/30)+1}`}</div>
+      <textarea data-key="assess${day}_intention" placeholder="${day===90?'Dear me, after 90 days I want to tell you…':'My clear intention for the next 30 days is…'}" style="margin-top:10px;min-height:110px"></textarea>
+    </div>
+  `;
+  if(day===90){const extra=document.createElement('div');extra.className='quote-card';extra.innerHTML=`<p>"In 90 days, you will have proven something irreversible: that you are capable. What you are building here is a new trust in your own word. And that, no one can ever take away from you."</p>`;sec.appendChild(extra);}
+  attachAutoSave(sec);
+}
+
+function buildDay30(sec){buildAssessSection(sec,30,"Don't judge yourself based on external results. Judge yourself on consistency.",'Energy',`<div class="assess-box"><div class="assess-box-label">Non-Neg Kept</div><input type="number" data-key="assess30_nonneg" placeholder="—" style="text-align:center;font-size:1.4rem;border:none;background:transparent;font-family:'Cormorant Garamond',serif" max="100" min="0"><div class="assess-box-sub">% of the time</div></div>`);}
+function buildDay60(sec){buildAssessSection(sec,60,"Your habits are starting to solidify. Don't lower your standards — raise them.",'Confidence',`<div class="assess-box"><div class="assess-box-label">Total Saved</div><input type="number" data-key="assess60_saved" placeholder="—" style="text-align:center;font-size:1.4rem;border:none;background:transparent;font-family:'Cormorant Garamond',serif;width:100%" max="99999" min="0"><div class="assess-box-sub">€ accumulated</div></div>`);}
+function buildDay90(sec){buildAssessSection(sec,90,"Photos. Numbers. Feelings. Document it. You deserve to see how far you've come.",'Final Confidence',`<div class="assess-box"><div class="assess-box-label">Total Saved</div><input type="number" data-key="assess90_saved" placeholder="—" style="text-align:center;font-size:1.4rem;border:none;background:transparent;font-family:'Cormorant Garamond',serif;width:100%"><div class="assess-box-sub">€ accumulated</div></div>`);}
+
+/* ============================
+   START
+============================ */
+window.addEventListener('load', () => { initApp(); });
+</script>
+</body>
+</html>
